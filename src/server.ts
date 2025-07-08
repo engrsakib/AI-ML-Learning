@@ -1,5 +1,5 @@
 import { Server } from "http";
-import express, { Express } from "express";
+import express, { Express, Request, Response } from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 
@@ -21,3 +21,7 @@ const startServer = async(port: number): Promise<void> => {
 }
 
 startServer(Number(process.env.PORT) || 1000);
+
+app.get('/', (req: Request, res: Response) => {
+    res.status(200).json('Welcome to the Tour Management System');
+});
