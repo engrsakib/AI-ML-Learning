@@ -1,17 +1,20 @@
+/* eslint-disable no-console */
 import { Server } from "http";
 // import { Request, Response } from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-import app from "./app";
 
-dotenv.config();
+import app from "./app";
+import envVar from "./app/config/envVar";
+
+
 
 let server: Server;
 
 const startServer = async (port: number): Promise<void> => {
   try {
-    await mongoose.connect(process.env.DATABASE_URL as string);
+    await mongoose.connect(envVar.DATABASE_URL);
     server = app.listen(port, () => {
+      console.log("Connected to MongoDB");
       console.log(`Server is running on port ${port}`);
     });
   } catch (error: unknown) {
@@ -19,7 +22,7 @@ const startServer = async (port: number): Promise<void> => {
   }
 };
 
-startServer(Number(process.env.PORT) || 1000);
+startServer(Number(envVar.PORT) || 1000);
 
 process.on("unhandledRejection", (error: Error) => {
   console.error("Unhandled Rejection:", error);
