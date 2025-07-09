@@ -23,3 +23,14 @@ const startServer = async(port: number): Promise<void> => {
 
 startServer(Number(process.env.PORT) || 1000);
 
+
+process.on("unhandledRejection", (error: Error) => {
+    console.error("Unhandled Rejection:", error);
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+    } else {
+        process.exit(1);
+    }
+});
