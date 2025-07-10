@@ -24,4 +24,11 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    status: "error",
+    message: "Not Found",
+  });
+});
+
 export default app;
