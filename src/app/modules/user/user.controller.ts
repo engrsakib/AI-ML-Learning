@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status-codes";
-import { User } from "./user.model";
 import { UserService } from "./user.service";
 
 const createUser = async (req: Request, res: Response) => {
