@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
+import envVar from "../config/envVar";
 
 const globalErrorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   
@@ -8,7 +9,7 @@ const globalErrorHandler = (err: Error, req: Request, res: Response, next: NextF
     message: "Internal Server Error",
     error: err.message,
     err,
-    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    stack: envVar.NODE_ENV === "development" ? err.stack : undefined,
   });
   next();
 };
