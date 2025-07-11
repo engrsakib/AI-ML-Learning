@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { UserService } from "./user.service";
 import AppError from "../../errorHelpers/appError";
+import { sendResponse } from "../../util/sendResponse";
 
 
 /**
@@ -27,11 +28,14 @@ const createUser = async (req: Request, res: Response) => {
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await UserService.getAllUsers();
-    res.status(httpStatus.OK).json({
+    sendResponse(res, {
       success: true,
       message: "Users retrieved successfully",
-      allUserCount: users.length,
-      users,
+      status: httpStatus.OK,
+      data: users,
+      metadata: {
+        totalCount: users.length,
+      },
     });
   } catch (error) {
     console.log(error);
