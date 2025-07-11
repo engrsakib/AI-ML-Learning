@@ -16,7 +16,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use(globalErrorHandler);
-
+// Handle 404 Not Found
 app.use(notFoundMiddleware);
 
 export default app;
