@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { UserService } from "./user.service";
+import AppError from "../../errorHelpers/appError";
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -9,10 +10,9 @@ const createUser = async (req: Request, res: Response) => {
       message: "User created successfully",
       user: newUser,
     });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   } catch (error) {
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: "Error creating user", error });
+    throw new AppError("Failed to create user", httpStatus.INTERNAL_SERVER_ERROR);
   }
 };
 
