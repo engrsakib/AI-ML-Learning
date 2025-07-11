@@ -9,7 +9,11 @@ const createUser = async (payload: Partial<IUser>) => {
 
 const getAllUsers = async () => {
   const users = await User.find();
-  return users;
+  if (!users || users.length === 0) {
+    throw new Error("No users found");
+  }
+  const userCount = await User.countDocuments();
+  return { users, userCount };
 };
 
 export const UserService = {

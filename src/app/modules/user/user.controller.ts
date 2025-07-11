@@ -28,13 +28,14 @@ const createUser = async (req: Request, res: Response) => {
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await UserService.getAllUsers();
+   
     sendResponse(res, {
       success: true,
       message: "Users retrieved successfully",
       status: httpStatus.OK,
-      data: users,
+      data: users?.users,
       metadata: {
-        totalCount: users.length,
+        totalCount: users?.userCount || 0,
       },
     });
   } catch (error) {
