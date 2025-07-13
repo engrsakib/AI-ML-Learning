@@ -9,4 +9,4 @@ router.post("/register", validateRequest(createUserZodSchema), UserController.cr
 router.get("/", UserController.getAllUsers);
 
 
-export const UserRoutes = router;
+export const UserRoutes = router; 
