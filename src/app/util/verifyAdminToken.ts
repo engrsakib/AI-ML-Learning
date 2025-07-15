@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export const verifyAdminToken = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const acccessToken = req.headers.authorization;
@@ -14,7 +14,7 @@ export const verifyAdminToken = (
     }
     const verifiedToken = jwt.verify(
       acccessToken,
-      process.env.JWT_SECRET as string
+      process.env.JWT_SECRET as string,
     );
     if (!verifiedToken) {
       res.status(401).json({ message: "Invalid token" });
