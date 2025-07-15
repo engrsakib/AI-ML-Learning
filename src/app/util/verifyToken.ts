@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-export const verifyAdminToken = (...authRole: string[]) => async (
+export const verifyToken = (...authRole: string[]) => async (
   req: Request,
   res: Response,
   next: NextFunction,

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { UserController } from "./user.controller";
 import { createUserZodSchema } from "./user.validations";
 import { validateRequest } from "../../middleware/validateRequest";
-import { verifyAdminToken } from "../../util/verifyAdminToken";
+import { verifyToken } from "../../util/verifyToken";
 
 const router = Router();
 
@@ -12,7 +12,7 @@ router.post(
   UserController.createUser,
 );
 router.get(
-  "/",verifyAdminToken("ADMIN", "SUPPERADMIN", "USER"),
+  "/",verifyToken("ADMIN", "SUPPERADMIN", "USER"),
   UserController.getAllUsers,
 );
 
