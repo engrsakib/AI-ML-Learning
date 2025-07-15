@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-export const verifyAdminToken = (
+export const verifyAdminToken = (...authRole: string[]) => async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -20,8 +20,9 @@ export const verifyAdminToken = (
       res.status(401).json({ message: "Invalid token" });
       return;
     }
+
     // Optionally, you can check if the user is an admin
-    if ((verifiedToken as jwt.JwtPayload).role !== "admin" && (verifiedToken as jwt.JwtPayload).role !== "superAdmin") {
+    if (!authRole.includes((verifiedToken as jwt.JwtPayload).role)) {
       res.status(403).json({ message: "You do not have permission to access this resource" });
       return;
     }

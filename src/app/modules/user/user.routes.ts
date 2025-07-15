@@ -12,7 +12,7 @@ router.post(
   UserController.createUser,
 );
 router.get(
-  "/",verifyAdminToken,
+  "/",verifyAdminToken("ADMIN", "SUPPERADMIN", "USER"),
   UserController.getAllUsers,
 );
 
