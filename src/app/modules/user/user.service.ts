@@ -1,9 +1,11 @@
+import { JwtPayload } from "jsonwebtoken";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
 import bcrypt from "bcryptjs";
+import AppError from "../../errorHelpers/appError";
+import { httpStatus } from 'http-status-codes';
 
 const createUser = async (payload: Partial<IUser>) => {
-
   const { password, ...userData } = payload;
 
   if (!payload.email || !payload.password) {
@@ -22,9 +24,15 @@ const createUser = async (payload: Partial<IUser>) => {
 };
 
 // update user
-const updateUser = async (id: string, payload: Partial<IUser>) => {
-  
-}
+const updateUser = async (
+  id: string,
+  payload: Partial<IUser>,
+  decodedToken: JwtPayload
+) => {
+  if (!id) {
+    throw new AppError( "User ID is required for updating user", httpStatus.FORBIDDEN);
+  }
+};
 
 const getAllUsers = async () => {
   const users = await User.find();
@@ -38,4 +46,5 @@ const getAllUsers = async () => {
 export const UserService = {
   createUser,
   getAllUsers,
+  updateUser,
 };
