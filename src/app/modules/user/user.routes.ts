@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
-import { createUserZodSchema } from "./user.validations";
+import { createUserZodSchema, updateUserZodSchema } from "./user.validations";
 import { validateRequest } from "../../middleware/validateRequest";
 import { verifyToken } from "../../util/verifyToken";
 
@@ -14,6 +14,12 @@ router.post(
 router.get(
   "/",verifyToken("ADMIN", "SUPPERADMIN", "USER"),
   UserController.getAllUsers,
+);
+router.patch(
+  "/:id",
+  validateRequest(updateUserZodSchema),
+  verifyToken("ADMIN", "SUPPERADMIN"),
+  UserController.updateUser,
 );
 
 export const UserRoutes = router;

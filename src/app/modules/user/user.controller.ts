@@ -33,7 +33,7 @@ const updateUser = async (req: Request, res: Response) => {
     if (!isTokenValid) {
       throw new AppError("Unauthorized access", httpStatus.UNAUTHORIZED);
     }
-    const updatedUser = await UserService.updateUser(req.params.id, req.body, isTokenValid);
+    const updatedUser = await UserService.updateUser(id, req.body, isTokenValid);
     res.status(httpStatus.OK).json({
       message: "User updated successfully",
       user: updatedUser,
@@ -72,4 +72,5 @@ const getAllUsers = async (req: Request, res: Response) => {
 export const UserController = {
   createUser,
   getAllUsers,
+  updateUser,
 };
