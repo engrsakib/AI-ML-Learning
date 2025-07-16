@@ -1,9 +1,9 @@
 import { JwtPayload } from "jsonwebtoken";
-import { IUser, role } from "./user.interface";
+import { isActive, IUser, role } from "./user.interface";
 import { User } from "./user.model";
 import bcrypt from "bcryptjs";
 import AppError from "../../errorHelpers/appError";
-import { httpStatus } from 'http-status-codes';
+import httpStatus from "http-status-codes";
 
 const createUser = async (payload: Partial<IUser>) => {
   const { password, ...userData } = payload;
@@ -29,23 +29,62 @@ const updateUser = async (
   payload: Partial<IUser>,
   decodedToken: JwtPayload,
 ) => {
-  if (!id) {
-    throw new AppError( "User ID is required for updating user", httpStatus.FORBIDDEN);
+  const isUserExists = await User.findById(id);
+  if (!isUserExists) {
+    throw new AppError("User not found", httpStatus.NOT_FOUND);
   }
-  if(payload.role){
-    if (decodedToken.role !== role.USER && decodedToken.role !== role.GUIDE) {
-      throw new AppError("You do not have permission to update user roles", httpStatus.FORBIDDEN);
-    }
-    if (payload.role === role.SUPER_ADMIN || payload.role === role.ADMIN) {
-      throw new AppError("Cannot update user role to SUPERADMIN", httpStatus.FORBIDDEN);
+  if (isUserExists.isDeleted || isUserExists.isActive === isActive.BLOCKED) {
+    if (!decodedToken || !decodedToken.role) {
+      throw new AppError("Unauthorized access", httpStatus.UNAUTHORIZED);
     }
   }
 
-  if(payload.isActive || payload.isDeleted || payload.isVarified) {
-    if (decodedToken.role !== role.SUPER_ADMIN && decodedToken.role !== role.ADMIN) {
-      throw new AppError("Only SUPERADMIN can update user active or deleted status", httpStatus.FORBIDDEN);
+  if (!id) {
+    throw new AppError(
+      "User ID is required for updating user",
+      httpStatus.FORBIDDEN,
+    );
+  }
+  if (payload.role) {
+    if (decodedToken.role !== role.USER && decodedToken.role !== role.GUIDE) {
+      throw new AppError(
+        "You do not have permission to update user roles",
+        httpStatus.FORBIDDEN,
+      );
+    }
+    if (payload.role === role.SUPER_ADMIN || payload.role === role.ADMIN) {
+      throw new AppError(
+        "Cannot update user role to SUPERADMIN",
+        httpStatus.FORBIDDEN,
+      );
     }
   }
+
+  if (payload.isActive || payload.isDeleted || payload.isVarified) {
+    if (
+      decodedToken.role !== role.SUPER_ADMIN &&
+      decodedToken.role !== role.ADMIN
+    ) {
+      throw new AppError(
+        "Only SUPERADMIN can update user active or deleted status",
+        httpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  if (payload.password) {
+    const hashedPassword = await bcrypt.hash(
+      payload.password,
+      Number(process.env.BCRYPT_SALT_ROUNDS),
+    );
+    payload.password = hashedPassword;
+  }
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    { ...payload },
+    { new: true, runValidators: true },
+  );
 };
 
 const getAllUsers = async () => {
