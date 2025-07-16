@@ -40,6 +40,12 @@ const updateUser = async (
       throw new AppError("Cannot update user role to SUPERADMIN", httpStatus.FORBIDDEN);
     }
   }
+
+  if(payload.isActive || payload.isDeleted || payload.isVarified) {
+    if (decodedToken.role !== role.SUPER_ADMIN && decodedToken.role !== role.ADMIN) {
+      throw new AppError("Only SUPERADMIN can update user active or deleted status", httpStatus.FORBIDDEN);
+    }
+  }
 };
 
 const getAllUsers = async () => {
