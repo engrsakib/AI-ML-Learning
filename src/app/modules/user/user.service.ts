@@ -27,7 +27,7 @@ const createUser = async (payload: Partial<IUser>) => {
 const updateUser = async (
   id: string,
   payload: Partial<IUser>,
-  decodedToken: JwtPayload
+  decodedToken: JwtPayload,
 ) => {
   if (!id) {
     throw new AppError( "User ID is required for updating user", httpStatus.FORBIDDEN);
@@ -35,6 +35,9 @@ const updateUser = async (
   if(payload.role){
     if (decodedToken.role !== role.USER && decodedToken.role !== role.GUIDE) {
       throw new AppError("You do not have permission to update user roles", httpStatus.FORBIDDEN);
+    }
+    if (payload.role === role.SUPER_ADMIN || payload.role === role.ADMIN) {
+      throw new AppError("Cannot update user role to SUPERADMIN", httpStatus.FORBIDDEN);
     }
   }
 };
