@@ -1,5 +1,5 @@
 import { JwtPayload } from "jsonwebtoken";
-import { IUser } from "./user.interface";
+import { IUser, role } from "./user.interface";
 import { User } from "./user.model";
 import bcrypt from "bcryptjs";
 import AppError from "../../errorHelpers/appError";
@@ -31,6 +31,11 @@ const updateUser = async (
 ) => {
   if (!id) {
     throw new AppError( "User ID is required for updating user", httpStatus.FORBIDDEN);
+  }
+  if(payload.role){
+    if (decodedToken.role !== role.USER && decodedToken.role !== role.GUIDE) {
+      throw new AppError("You do not have permission to update user roles", httpStatus.FORBIDDEN);
+    }
   }
 };
 
