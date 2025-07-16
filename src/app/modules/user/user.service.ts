@@ -85,6 +85,8 @@ const updateUser = async (
     { ...payload },
     { new: true, runValidators: true },
   );
+
+  return user || null;
 };
 
 const getAllUsers = async () => {

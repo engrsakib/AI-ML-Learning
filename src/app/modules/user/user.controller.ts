@@ -4,6 +4,8 @@ import httpStatus from "http-status-codes";
 import { UserService } from "./user.service";
 import AppError from "../../errorHelpers/appError";
 import { sendResponse } from "../../util/sendResponse";
+import { verifyToken } from "../../util/verifyToken";
+import { JwtPayload } from "jsonwebtoken";
 
 
 /**
@@ -16,6 +18,25 @@ const createUser = async (req: Request, res: Response) => {
     res.status(httpStatus.CREATED).json({
       message: "User created successfully",
       user: newUser,
+    });
+  
+  } catch (error) {
+    console.log(error);
+    throw new AppError("Failed to create user", httpStatus.INTERNAL_SERVER_ERROR);
+  }
+};
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const token = req.headers.authorization;
+    const isTokenValid = verifyToken(token as string,"ADMIN", "SUPPERADMIN", "USER") as JwtPayload;
+    if (!isTokenValid) {
+      throw new AppError("Unauthorized access", httpStatus.UNAUTHORIZED);
+    }
+    const updatedUser = await UserService.updateUser(req.params.id, req.body, isTokenValid);
+    res.status(httpStatus.OK).json({
+      message: "User updated successfully",
+      user: updatedUser,
     });
   
   } catch (error) {
