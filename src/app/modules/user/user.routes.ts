@@ -21,5 +21,5 @@ router.patch(
   verifyToken("ADMIN", "SUPPERADMIN"),
   UserController.updateUser,
 );
-
+  
 export const UserRoutes = router;
