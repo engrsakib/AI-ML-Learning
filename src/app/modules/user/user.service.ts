@@ -21,6 +21,11 @@ const createUser = async (payload: Partial<IUser>) => {
   return newUser;
 };
 
+// update user
+const updateUser = async (id: string, payload: Partial<IUser>) => {
+  
+}
+
 const getAllUsers = async () => {
   const users = await User.find();
   if (!users || users.length === 0) {
