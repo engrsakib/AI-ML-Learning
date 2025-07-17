@@ -7,6 +7,12 @@ import { AuthService } from "./auth.service";
 const credentialsLogin = async (req: Request, res: Response) => {
 
   const loginInfo = await AuthService.credentialsLogin(req.body);
+  // Set cookies for access and refresh tokens
+  res.cookie("accessToken", loginInfo.acccessToken, {
+    httpOnly: true,
+    secure: false, // Set secure flag in production
+  });
+  // Set refresh token in cookies
   res.cookie("refreshToken", loginInfo.refreshToken, {
     httpOnly: true,
     secure: false, // Set secure flag in production
