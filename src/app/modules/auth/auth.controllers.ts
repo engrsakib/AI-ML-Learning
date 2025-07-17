@@ -3,9 +3,13 @@ import httpStatus from "http-status-codes";
 import { sendResponse } from "../../util/sendResponse";
 import { AuthService } from "./auth.service";
 
+
 const credentialsLogin = async (req: Request, res: Response) => {
 
   const loginInfo = await AuthService.credentialsLogin(req.body);
+  res.cookie("refreshToken", loginInfo.refreshToken, {
+    httpOnly: true,
+  });
   sendResponse(res, {
     success: true,
     message: "Login successful",
@@ -15,6 +19,7 @@ const credentialsLogin = async (req: Request, res: Response) => {
 };
 const getNewAccessToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
+ 
   const tokenInfo = await AuthService.getNewAccessToken(refreshToken);
   sendResponse(res, {
     success: true,
