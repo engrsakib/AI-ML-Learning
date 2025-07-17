@@ -18,7 +18,7 @@ router.get(
 router.patch(
   "/:id",
   validateRequest(updateUserZodSchema),
-  verifyToken("ADMIN", "SUPPERADMIN"),
+  verifyToken("ADMIN", "SUPPERADMIN", "USER"),
   UserController.updateUser,
 );
   
