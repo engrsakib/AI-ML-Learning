@@ -22,7 +22,7 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     role: isUserExists.role,
     name: isUserExists.name,
   }, process.env.JWT_SECRET as string, {
-    expiresIn: "1h", // Token expiration time
+    expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRES_IN),
   });
 
   // If authentication is successful, return user information or token
