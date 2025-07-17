@@ -67,6 +67,7 @@ const getNewAccessToken = async (refreshToken: string) => {
         throw new AppError("User is deleted", 403);
       }
     }
+    
 
     const newAccessToken = jwt.sign({
       id: user._id,
@@ -77,7 +78,10 @@ const getNewAccessToken = async (refreshToken: string) => {
       expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRES_IN) || 3600, // Default to 1 hour if not specified
     });
 
-    return { user, newAccessToken };
+    // Return the new access token and user information
+    user.password = ""; // Ensure password is not returned in the response
+
+    return { user, accessToken: newAccessToken };
   } catch (error) {
     throw new AppError(`Invalid refresh token: ${error}`, 401);
   }
