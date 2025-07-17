@@ -36,10 +36,10 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
   // If authentication is successful, return user information or token
   return {
     id: isUserExists._id,
+    name: isUserExists.name,
     email: isUserExists.email,
     acccessToken,
     refreshToken,
-    
   };
 };
 

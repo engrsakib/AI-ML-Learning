@@ -10,7 +10,7 @@ const credentialsLogin = async (req: Request, res: Response) => {
     success: true,
     message: "Login successful",
     status: httpStatus.OK,
-    data: { user: loginInfo },
+    data: loginInfo ,
   });
 };
 
