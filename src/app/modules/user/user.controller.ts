@@ -41,7 +41,7 @@ const updateUser = async (req: Request, res: Response) => {
   
   } catch (error) {
     console.log(error);
-    throw new AppError("Failed to create user", httpStatus.INTERNAL_SERVER_ERROR);
+    throw new AppError("Failed to update user", httpStatus.INTERNAL_SERVER_ERROR);
   }
 };
 

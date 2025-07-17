@@ -57,7 +57,7 @@ const updateUser = async (
         "Cannot update user role to SUPERADMIN",
         httpStatus.FORBIDDEN,
       );
-    }
+    } 
   }
 
   if (payload.isActive || payload.isDeleted || payload.isVarified) {
