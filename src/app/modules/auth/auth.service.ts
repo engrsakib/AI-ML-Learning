@@ -22,7 +22,15 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     role: isUserExists.role,
     name: isUserExists.name,
   }, process.env.JWT_SECRET as string, {
-    expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRES_IN),
+    expiresIn:  Number(process.env.ACCESS_TOKEN_EXPIRES_IN) || 3600, // Default to 1 hour if not specified
+  });
+  const refreshToken = jwt.sign({
+    id: isUserExists._id,
+    email: isUserExists.email,
+    role: isUserExists.role,
+    name: isUserExists.name,
+  }, process.env.JWT_REFRESH_TOKEN_SECRET as string, {
+    expiresIn: Number(process.env.REFRESH_TOKEN_EXPIRES_IN) || 604800, // Default to 7 days if not specified
   });
 
   // If authentication is successful, return user information or token
@@ -30,6 +38,8 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     id: isUserExists._id,
     email: isUserExists.email,
     acccessToken,
+    refreshToken,
+    
   };
 };
 
