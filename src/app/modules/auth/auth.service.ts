@@ -33,11 +33,12 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     expiresIn: Number(process.env.REFRESH_TOKEN_EXPIRES_IN) || 604800, // Default to 7 days if not specified
   });
 
+  // delete isUserExists.password; // Remove password from the user object before returning
+  isUserExists.password = ""; // Ensure password is not returned in the response
+
   // If authentication is successful, return user information or token
   return {
-    id: isUserExists._id,
-    name: isUserExists.name,
-    email: isUserExists.email,
+    user: isUserExists,
     acccessToken,
     refreshToken,
   };
