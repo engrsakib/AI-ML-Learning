@@ -1,5 +1,6 @@
+
 import AppError from "../../errorHelpers/appError";
-import { IUser } from "../user/user.interface";
+import { isActive, IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import  bcrypt  from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -44,6 +45,45 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
   };
 };
 
+// refresh token logic
+const getNewAccessToken = async (refreshToken: string) => {
+  if (!refreshToken) {
+    throw new AppError("Refresh token is required", 400);
+  }
+
+  try {
+    // Verify the refresh token
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET as string) as IUser;
+    const user = await User.findById(decoded._id).select("-password");
+    
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+    if(user){
+      // Check if the user is active or not
+      if (user.isActive === isActive.BLOCKED) {
+        throw new AppError("User is not active", 403);
+      }else if (user.isDeleted) {
+        throw new AppError("User is deleted", 403);
+      }
+    }
+
+    const newAccessToken = jwt.sign({
+      id: user._id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    }, process.env.JWT_SECRET as string, {
+      expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRES_IN) || 3600, // Default to 1 hour if not specified
+    });
+
+    return { user, newAccessToken };
+  } catch (error) {
+    throw new AppError(`Invalid refresh token: ${error}`, 401);
+  }
+};
+
 export const AuthService = {
   credentialsLogin,
+  getNewAccessToken,
 };

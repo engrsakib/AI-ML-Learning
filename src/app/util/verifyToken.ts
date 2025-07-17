@@ -23,7 +23,7 @@ export const verifyToken = (...authRole: string[]) => async (
 
     // Optionally, you can check if the user is an admin
     if (!authRole.includes((verifiedToken as jwt.JwtPayload).role)) {
-      res.status(403).json({ message: "You do not have permission to access this resource" });
+      res.status(403).json({ message: "You do not have permission to access this resource/routes" });
       return;
     }
 

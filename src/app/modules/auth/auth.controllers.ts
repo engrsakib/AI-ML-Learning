@@ -13,7 +13,18 @@ const credentialsLogin = async (req: Request, res: Response) => {
     data: loginInfo ,
   });
 };
+const getNewAccessToken = async (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refreshToken;
+  const tokenInfo = await AuthService.getNewAccessToken(refreshToken);
+  sendResponse(res, {
+    success: true,
+    message: "New access token generated successfully",
+    status: httpStatus.OK,
+    data: tokenInfo ,
+  });
+};
 
 export const AuthController = {
   credentialsLogin,
+  getNewAccessToken,
 };
