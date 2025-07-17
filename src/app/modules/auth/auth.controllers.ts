@@ -9,6 +9,7 @@ const credentialsLogin = async (req: Request, res: Response) => {
   const loginInfo = await AuthService.credentialsLogin(req.body);
   res.cookie("refreshToken", loginInfo.refreshToken, {
     httpOnly: true,
+    secure: false, // Set secure flag in production
   });
   sendResponse(res, {
     success: true,

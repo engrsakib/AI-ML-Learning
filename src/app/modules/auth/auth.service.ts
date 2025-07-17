@@ -54,8 +54,8 @@ const getNewAccessToken = async (refreshToken: string) => {
   try {
     // Verify the refresh token
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET as string) as IUser;
-    const user = await User.findById(decoded._id).select("-password");
-    
+    const user = await User.findOne({ email: decoded.email });
+
     if (!user) {
       throw new AppError("User not found", 404);
     }
