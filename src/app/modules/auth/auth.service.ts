@@ -103,7 +103,20 @@ const getNewAccessToken = async (refreshToken: string) => {
   }
 };
 
+const resetPassword = async (email: string, newPassword: string) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  user.password = await bcrypt.hash(newPassword, 12);
+  await user.save();
+
+  return { message: "Password reset successfully" };
+};
+
 export const AuthService = {
   credentialsLogin,
   getNewAccessToken,
+  resetPassword,
 };
