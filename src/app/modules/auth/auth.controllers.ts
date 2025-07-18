@@ -58,8 +58,16 @@ const logout = async (req: Request, res: Response) => {
 
 const resetPassword = async (req: Request, res: Response) => {
   const { oldPassword, newPassword } = req.body;
+  const accessToken = req.cookies.accessToken;
+  if (!accessToken) {
+    sendResponse(res, {
+      success: false,
+      message: "Access token is required",
+      status: httpStatus.UNAUTHORIZED,  
+    });
+  }
 
-  const result = await AuthService.resetPassword(oldPassword, newPassword);
+  const result = await AuthService.resetPassword(oldPassword, newPassword, accessToken);
   sendResponse(res, {
     success: true,
     message: "Password reset successfully",

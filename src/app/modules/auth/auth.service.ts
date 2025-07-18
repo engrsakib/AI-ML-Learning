@@ -1,4 +1,5 @@
 import AppError from "../../errorHelpers/appError";
+import { decodedToken } from "../../util/decodedToken";
 import { isActive, IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import bcrypt from "bcryptjs";
@@ -103,12 +104,37 @@ const getNewAccessToken = async (refreshToken: string) => {
   }
 };
 
-const resetPassword = async (email: string, newPassword: string) => {
-  const user = await User.findOne({ email });
+const resetPassword = async (oldPassword: string, newPassword: string, accessToken: string) => {
+  
+  const decoded = decodedToken(accessToken);
+  if (!decoded) {
+    throw new AppError("Invalid access token", 401);
+  }
+  const user = await User.findOne({ email: decoded.email  });
   if (!user) {
     throw new AppError("User not found", 404);
   }
+  if (user.isActive === isActive.BLOCKED) {
+    throw new AppError("User is not active", 403);
+  } else if (user.isDeleted) {
+    throw new AppError("User is deleted", 403);
+  }
 
+  const isOldPasswordValid = await bcrypt.compare(
+    oldPassword,
+    user.password,
+  );
+  if (!isOldPasswordValid) {
+    throw new AppError("Old password is incorrect", 401);
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    newPassword,
+    user.password,
+  );
+  if (isPasswordValid) {
+    throw new AppError("New password cannot be the same as the old password", 400);
+  }
   user.password = await bcrypt.hash(newPassword, Number(process.env.BCRYPT_SALT_ROUNDS) || 12);
   await user.save();
 
