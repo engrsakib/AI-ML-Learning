@@ -109,7 +109,7 @@ const resetPassword = async (email: string, newPassword: string) => {
     throw new AppError("User not found", 404);
   }
 
-  user.password = await bcrypt.hash(newPassword, 12);
+  user.password = await bcrypt.hash(newPassword, Number(process.env.BCRYPT_SALT_ROUNDS) || 12);
   await user.save();
 
   return { message: "Password reset successfully" };
