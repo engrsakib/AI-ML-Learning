@@ -38,9 +38,17 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 
 const logout = async (req: Request, res: Response) => {
   // Clear cookies
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
-  
+  res.clearCookie("accessToken",{
+    httpOnly: true,
+    secure: false, // Set secure flag in production
+    sameSite: "lax", // Adjust as needed
+  });
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: false, // Set secure flag in production
+    sameSite: "lax", // Adjust as needed
+  });
+
   sendResponse(res, {
     success: true,
     message: "Logged out successfully",
