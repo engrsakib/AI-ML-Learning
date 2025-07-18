@@ -36,7 +36,20 @@ const getNewAccessToken = async (req: Request, res: Response) => {
   });
 };
 
+const logout = async (req: Request, res: Response) => {
+  // Clear cookies
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  
+  sendResponse(res, {
+    success: true,
+    message: "Logged out successfully",
+    status: httpStatus.OK,
+  });
+};
+
 export const AuthController = {
   credentialsLogin,
   getNewAccessToken,
+  logout,
 };
