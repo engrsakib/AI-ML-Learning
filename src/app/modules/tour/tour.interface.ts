@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface Itour{
     id?: string;
     name: string;
@@ -9,6 +11,16 @@ export interface Itour{
     costTo?: number;
     startDate?: Date;
     endDate?: Date;
+    included?: string[];
+    excluded?: string[];
+    amenities?: string[];
+    itinerary?: string;
+    tourPlan?: string[];
+    maxGests?: number;
+    minAge?: number;
+    maxAge?: number;
+    division: Types.ObjectId;
+    tourType: Types.ObjectId;
     description?: string;
     createdAt: Date;
     updatedAt: Date;
