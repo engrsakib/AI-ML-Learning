@@ -26,3 +26,8 @@ export interface Itour{
     updatedAt: Date;
     isActive?: boolean;
 }
+
+export interface ItourType {
+    name: string;
+    
+}
