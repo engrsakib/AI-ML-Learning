@@ -8,5 +8,5 @@ import { role } from "../user/user.interface";
 const router = Router();
 router.post("/create", verifyToken(role.ADMIN, role.SUPER_ADMIN), validateRequest(createDivisionSchema), divisionsController.createDivisions);
 router.get("/", verifyToken(role.ADMIN, role.SUPER_ADMIN, role.USER, role.GUIDE), divisionsController.getAllDivisions);
-
+router.get("/:slug", verifyToken(role.ADMIN, role.SUPER_ADMIN, role.USER, role.GUIDE), divisionsController.getSingleDivision);
 export const DivisionsRoutes = router;
