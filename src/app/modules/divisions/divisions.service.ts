@@ -60,6 +60,16 @@ const updateDivision = async (id: string, payload: Partial<IDivision>) => {
   if (duplicateDivision) {
     throw new Error("Division with this name already exists");
   }
+  if (payload.name) {
+    const BaseSlug = payload.name.toLowerCase().split(" ").join("-");
+    let slug = `${BaseSlug}-division`;
+    let count = 0;
+    while (await Division.exists({ slug, _id: { $ne: id } })) {
+      count++;
+      slug = `${BaseSlug}-division-${count}`;
+    }
+    payload.slug = slug;
+  }
   const updatedDivision = await Division.findByIdAndUpdate(
     id,
     payload,
