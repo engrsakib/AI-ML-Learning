@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import AppError from "../../errorHelpers/appError";
 import { TourService } from "./tour.service";
-import { sendResponse } from "../../util/sendResponse";
+
 
 const createTour = async (req: Request, res: Response) => {
   try {
