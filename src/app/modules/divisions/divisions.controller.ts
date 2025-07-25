@@ -14,9 +14,22 @@ const createDivisions = async (req: Request, res: Response) => {
   }
 };
 
+const getAllDivisions = async (req: Request, res: Response) => {
+  try {
+    const divisions = await divisionsService.getAllDivisions();
+    res.status(200).json({
+      message: "Divisions retrieved successfully",
+      data: divisions.data,
+      meta: divisions.meta,
+    });
+  } catch (error) {
+    throw new AppError(`Failed to retrieve divisions: ${error}`, 500);
+  }
+};
 
 
 
 export const divisionsController = {
   createDivisions,
+  getAllDivisions,
 };
