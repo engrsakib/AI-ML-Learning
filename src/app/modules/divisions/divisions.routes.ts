@@ -10,5 +10,5 @@ router.post("/create", verifyToken(role.ADMIN, role.SUPER_ADMIN), validateReques
 router.get("/", verifyToken(role.ADMIN, role.SUPER_ADMIN, role.USER, role.GUIDE), divisionsController.getAllDivisions);
 router.get("/:slug", verifyToken(role.ADMIN, role.SUPER_ADMIN, role.USER, role.GUIDE), divisionsController.getSingleDivision);
 router.delete("/:id", verifyToken(role.ADMIN, role.SUPER_ADMIN), divisionsController.deleteDivision);
-
+router.patch("/:id", verifyToken(role.ADMIN, role.SUPER_ADMIN), validateRequest(createDivisionSchema), divisionsController.updateDivision);
 export const DivisionsRoutes = router;
