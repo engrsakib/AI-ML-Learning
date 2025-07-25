@@ -20,7 +20,7 @@ const getAllTours = async (req: Request, res: Response) => {
     const tours = await TourService.getAllTours();
     res.status(200).json({
       message: "Tours retrieved successfully",
-      tours,
+      data:tours,
     });
   } catch (error) {
     throw new AppError(`Failed to retrieve tours: ${error}`, 500);
