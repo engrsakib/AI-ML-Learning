@@ -15,6 +15,19 @@ const createTour = async (req: Request, res: Response) => {
   }
 };
 
+const getAllTours = async (req: Request, res: Response) => {
+  try {
+    const tours = await TourService.getAllTours();
+    res.status(200).json({
+      message: "Tours retrieved successfully",
+      tours,
+    });
+  } catch (error) {
+    throw new AppError(`Failed to retrieve tours: ${error}`, 500);
+  }
+};
+
 export const TourController = {
   createTour,
+  getAllTours,
 };

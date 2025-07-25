@@ -7,7 +7,7 @@ import { createTourZodSchema } from "./tour.validations";
 
 const router = Router();
 router.post("/create",verifyToken(role.ADMIN, role.SUPER_ADMIN),validateRequest(createTourZodSchema), TourController.createTour);
-
+router.get("/", TourController.getAllTours);
 
 
 
