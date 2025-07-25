@@ -19,7 +19,13 @@ const createTour = async (payload: Itour) => {
   return tour;
 };
 
+const getAllTours = async () => {
+  const tours = await Tour.find();
+  return tours;
+};
+
 export const TourService = {
   createTour,
-  // Add other tour-related service functions here
+  getAllTours,
+  
 };
