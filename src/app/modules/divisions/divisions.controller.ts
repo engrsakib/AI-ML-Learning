@@ -39,8 +39,21 @@ const getSingleDivision = async (req: Request, res: Response) => {
   }
 };
 
+const deleteDivision = async (req: Request, res: Response) => {
+  try {
+    const division = await divisionsService.deleteDivision(req.params.id);
+    res.status(200).json({
+      message: "Division deleted successfully",
+      data: division,
+    });
+  } catch (error) {
+    throw new AppError(`Failed to delete division: ${error}`, 500);
+  }
+};
+
 export const divisionsController = {
   createDivisions,
   getAllDivisions,
   getSingleDivision,
+  deleteDivision,
 };
