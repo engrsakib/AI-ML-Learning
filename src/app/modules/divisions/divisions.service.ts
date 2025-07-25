@@ -48,9 +48,33 @@ const deleteDivision = async(id: string) => {
   return division;
 };
 
+const updateDivision = async (id: string, payload: Partial<IDivision>) => {
+  const existingDivision = await Division.findById(id);
+  if (!existingDivision) {
+    throw new Error("Division not found");
+  }
+  const duplicateDivision = await Division.findOne({
+    name: payload.name,
+    _id: { $ne: id },
+  });
+  if (duplicateDivision) {
+    throw new Error("Division with this name already exists");
+  }
+  const updatedDivision = await Division.findByIdAndUpdate(
+    id,
+    payload,
+    { new: true, runValidators: true },
+  );
+  if (!updatedDivision) {
+    throw new Error("Failed to update division");
+  }
+  return updatedDivision;
+};
+
 export const divisionsService = {
   createDivisons,
   getAllDivisions,
   getSingleDivision,
   deleteDivision,
+  updateDivision,
 };
