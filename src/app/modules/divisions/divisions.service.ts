@@ -40,8 +40,17 @@ const getSingleDivision = async (slug: string) => {
   return division;
 };
 
+const deleteDivision = async(id: string) => {
+  const division = await Division.findByIdAndDelete(id);
+  if (!division) {
+    throw new Error("Division not found");
+  }
+  return division;
+};
+
 export const divisionsService = {
   createDivisons,
   getAllDivisions,
   getSingleDivision,
+  deleteDivision,
 };
