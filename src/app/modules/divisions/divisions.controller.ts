@@ -29,6 +29,7 @@ const getAllDivisions = async (req: Request, res: Response) => {
 
 
 
+
 export const divisionsController = {
   createDivisions,
   getAllDivisions,

@@ -31,7 +31,17 @@ const getAllDivisions = async () => {
     },
   };
 };
+
+const getSingleDivision = async (slug: string) => {
+  const division = await Division.findOne({ slug });
+  if (!division) {
+    throw new Error("Division not found");
+  }
+  return division;
+};
+
 export const divisionsService = {
   createDivisons,
   getAllDivisions,
+  getSingleDivision,
 };
