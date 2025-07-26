@@ -1,5 +1,5 @@
-import { Itour } from "./tour.interface";
-import { Tour } from "./tour.mode";
+import { Itour, ItourType } from "./tour.interface";
+import { Tour, TourType } from "./tour.mode";
 
 const createTour = async (payload: Itour) => {
   const BaseSlug = payload.name.toLowerCase().split(" ").join("-");
@@ -32,8 +32,18 @@ const getSingleTour = async (slug: string) => {
   return tour;
 };
 
+const createTourTypes = async (payload: ItourType) => {
+  const existingTourType = await TourType.findOne({ where: { name: payload.name } });
+  if (existingTourType) {
+    throw new Error("Tour type with this name already exists");
+  }
+  const tourType = TourType.create(payload);
+  return tourType;
+};
+
 export const TourService = {
   createTour,
   getAllTours,
   getSingleTour,
+  createTourTypes,
 };
