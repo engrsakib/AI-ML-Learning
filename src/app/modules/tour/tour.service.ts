@@ -24,8 +24,16 @@ const getAllTours = async () => {
   return tours;
 };
 
+const getSingleTour = async (slug: string) => {
+  const tour = await Tour.findOne({ where: { slug } });
+  if (!tour) {
+    throw new Error("Tour not found");
+  }
+  return tour;
+};
+
 export const TourService = {
   createTour,
   getAllTours,
-  
+  getSingleTour,
 };
