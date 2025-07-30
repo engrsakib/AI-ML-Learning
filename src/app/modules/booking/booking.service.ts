@@ -4,11 +4,13 @@ import { User } from "../user/user.model";
 import { BookingStatus, IBooking } from "./booking.interface";
 import httpStatus from "http-status-codes";
 import { Booking } from "./booking.model";
+import { Payment } from "../payments/payment.model";
+import { PaymentStatus } from "../payments/payment.interface";
+import { Tour } from "../tour/tour.mode";
 
 const createBooking = async (payload: Partial<IBooking>, userId: string) => {
   const transactionId = getTransactionId();
   try {
-    
     const user = await User.findById(userId);
     if (!user || !user.phone || !user.address) {
       throw new AppError(
@@ -17,6 +19,23 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
       );
     }
 
+    const tour = await Tour.findById(payload.tour).select("costFrom");
+    if( !tour?.costFrom ) {
+      throw new AppError(
+        "Tour must have a cost to create a booking.",
+        httpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (typeof payload?.gestCount !== "number" || payload.gestCount <= 0) {
+      throw new AppError(
+        "Guest count must be a positive integer.",
+        httpStatus.BAD_REQUEST,
+      );
+    }
+    const amount = Number(tour.costFrom) * Number(payload.gestCount);
+
+
     const booking = await Booking.create({
       ...payload,
       user: userId,
@@ -24,12 +43,44 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
     });
 
     if (!booking) {
-      throw new AppError("Booking creation failed.", httpStatus.INTERNAL_SERVER_ERROR);
+      throw new AppError(
+        "Booking creation failed.",
+        httpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    
 
+    const payment = await Payment.create({
+      booking: booking._id,
+      status: PaymentStatus.UNPAID,
+      transactionId: transactionId,
+      amount: amount,
+    });
+
+    if (!payment) {
+      throw new AppError(
+        "Payment creation failed.",
+        httpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      booking._id,{
+        payment: payment._id,
+      },{ new: true, runValidators: true });
+
+    if (!updatedBooking) {
+      throw new AppError(
+        "Booking update failed.",
+        httpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return updatedBooking;
   } catch (error) {
-    throw new AppError(`Error creating booking. ${error}`, httpStatus.INTERNAL_SERVER_ERROR);
+    throw new AppError(
+      `Error creating booking. ${error}`,
+      httpStatus.INTERNAL_SERVER_ERROR
+    );
   }
 };
 

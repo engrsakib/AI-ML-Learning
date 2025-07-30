@@ -17,6 +17,7 @@ export interface Itour{
     itinerary?: string;
     tourPlan?: string[];
     maxGests?: number;
+    gestCount?: number;
     minAge?: number;
     maxAge?: number;
     division: Types.ObjectId;

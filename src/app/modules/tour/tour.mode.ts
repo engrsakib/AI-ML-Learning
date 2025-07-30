@@ -79,6 +79,10 @@ const tourSchema = new Schema<Itour>(
       type: Number,
       default: 0,
     },
+    gestCount: {
+      type: Number,
+      default: 0,
+    },
     minAge: {
       type: Number,
       default: 0,
