@@ -62,7 +62,7 @@ const failedPayment = async (query: Record<string, string>) => {
     await session.commitTransaction();
     session.endSession();
 
-    return { success: true, message: "Payment and booking updated successfully." };
+    return { success: true, message: "Payment and booking cancelled successfully." };
   } catch (error) {
     throw new Error("Payment success handling failed: " + error);
   }
