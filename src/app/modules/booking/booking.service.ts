@@ -16,7 +16,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
     session.startTransaction();
 
     try {
-      const user = await User.findById(userId, { session });
+      const user = await User.findById(userId);
       if (!user || !user.phone || !user.address) {
         throw new AppError(
           "User must have a phone number and address to create a booking.",
@@ -24,7 +24,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
         );
       }
 
-      const tour = await Tour.findById(payload.tour, { session }).select("costFrom");
+      const tour = await Tour.findById(payload.tour).select("costFrom");
       if (!tour?.costFrom) {
         throw new AppError(
           "Tour must have a cost to create a booking.",
@@ -34,11 +34,11 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
 
       const amount = Number(tour.costFrom) * Number(payload.guestCount);
 
-      const booking = await Booking.create({
+      const booking = await Booking.create([{
         ...payload,
         user: userId,
         status: BookingStatus.PENDING,
-      }, { session });
+      }], { session });
 
       if (!booking) {
         throw new AppError(
@@ -47,12 +47,12 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
         );
       }
 
-      const payment = await Payment.create({
+      const payment = await Payment.create([{
         bookingId: booking[0]._id, //when we added session, it returns an array for creation and update, we take the first element
         status: PaymentStatus.UNPAID,
         transactionId: transactionId,
         amount: amount,
-      }, { session });
+      }], { session });
 
       if (!payment) {
         throw new AppError(
