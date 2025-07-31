@@ -7,6 +7,7 @@ import { Booking } from "./booking.model";
 import { Payment } from "../payments/payment.model";
 import { PaymentStatus } from "../payments/payment.interface";
 import { Tour } from "../tour/tour.mode";
+import { sslCommerzService } from "../sslCommerz/sslCommerze.service";
 
 
 const createBooking = async (payload: Partial<IBooking>, userId: string) => {
@@ -78,9 +79,28 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
           httpStatus.INTERNAL_SERVER_ERROR,
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const userAddress = (updatedBooking.user as any).address || "N/A";
+
+      const sslPayload = {
+        amount: amount,
+        transactionId: transactionId,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        name: (updatedBooking.user as any).name,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        email: (updatedBooking.user as any).email,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        phone: (updatedBooking.user as any).phone,
+        address: userAddress,
+      };
+      
+      const sslPayment = await sslCommerzService.sslPaymentInit({
+        ...sslPayload,
+      });
+
       await session.commitTransaction();
       session.endSession();
-      return updatedBooking;
+      return { booking: updatedBooking , sslPayment: sslPayment.GatewayPageURL };
     } catch (error) {
       // If any error occurs, we abort the transaction
       await session.abortTransaction();
