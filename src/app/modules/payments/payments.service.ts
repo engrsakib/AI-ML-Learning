@@ -62,6 +62,38 @@ const failedPayment = async (query: Record<string, string>) => {
     await session.commitTransaction();
     session.endSession();
 
+    return { success: true, message: "Payment and booking failed successfully." };
+  } catch (error) {
+    throw new Error("Payment success handling failed: " + error);
+  }
+};
+
+const cancelPayment = async (query: Record<string, string>) => {
+  const session = await Booking.startSession();
+  session.startTransaction();
+  try {
+    const UpdatedPayments = await Payment.findOneAndUpdate(
+      { transactionId: query.transactionId },
+      { status: PaymentStatus.PENDING },
+      { new: true, session },
+    );
+
+    if (!UpdatedPayments) {
+      throw new Error("Payment not found or already updated.");
+    }
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      { _id: UpdatedPayments.bookingId },
+      { status: BookingStatus.CANCELED },
+      { new: true, session },
+    );
+
+    if (!updatedBooking) {
+      throw new Error("Booking not found or already updated.");
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
     return { success: true, message: "Payment and booking cancelled successfully." };
   } catch (error) {
     throw new Error("Payment success handling failed: " + error);
@@ -75,4 +107,5 @@ const failedPayment = async (query: Record<string, string>) => {
 export const paymentsService = {
   successPayment,
   failedPayment,
+  cancelPayment,
 };
