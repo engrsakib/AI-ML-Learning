@@ -16,7 +16,7 @@ const bookingSchema = new Schema<IBooking>({
   payment: {
     type: Schema.Types.ObjectId,
     ref: "Payment",
-    required: true,
+    required: false,
   },
   status: {
     type: String,
@@ -25,7 +25,7 @@ const bookingSchema = new Schema<IBooking>({
     default: BookingStatus.PENDING,
     required: true,
   },
-  gestCount: {
+  guestCount: {
     type: Number,
     required: true,
     min: 1,

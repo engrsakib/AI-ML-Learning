@@ -27,13 +27,8 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
       );
     }
 
-    if (typeof payload?.gestCount !== "number" || payload.gestCount <= 0) {
-      throw new AppError(
-        "Guest count must be a positive integer.",
-        httpStatus.BAD_REQUEST,
-      );
-    }
-    const amount = Number(tour.costFrom) * Number(payload.gestCount);
+   
+    const amount = Number(tour.costFrom) * Number(payload.guestCount);
 
 
     const booking = await Booking.create({
@@ -49,8 +44,9 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
       );
     }
 
+    
     const payment = await Payment.create({
-      booking: booking._id,
+      bookingId: booking._id,
       status: PaymentStatus.UNPAID,
       transactionId: transactionId,
       amount: amount,
