@@ -62,7 +62,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
     const updatedBooking = await Booking.findByIdAndUpdate(
       booking._id,{
         payment: payment._id,
-      },{ new: true, runValidators: true });
+      },{ new: true, runValidators: true }).populate("user", "name email phone address").populate("tour","name maxGests").populate("payment", "amount status");
 
     if (!updatedBooking) {
       throw new AppError(
