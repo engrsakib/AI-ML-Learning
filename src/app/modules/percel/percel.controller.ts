@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import AppError from "../../errorHelpers/appError";
 import { PercelService } from "./percel.service";
 
-
 const createPercel = async (req: Request, res: Response) => {
   try {
     const newParcel = await PercelService.createPercel(req.body);
@@ -17,7 +16,7 @@ const createPercel = async (req: Request, res: Response) => {
 
 const getAllParcels = async (req: Request, res: Response) => {
   try {
-    const parcels = await PercelService.getAllParcels();
+    const parcels = await PercelService.getAllPercel();
     res.status(200).json({
       message: "Parcels retrieved successfully",
       data: parcels,

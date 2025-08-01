@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createPercelZodSchema = z.object({
   name: z.string(),
-  slug: z.string(),
+  slug: z.string().optional(),
   images: z.array(z.string()).optional(),
   thumbnail: z.string().optional(),
   senderName: z.string(),
@@ -13,14 +13,13 @@ export const createPercelZodSchema = z.object({
   reciverAddress: z.string(),
   weight: z.number(),
   price: z.number(),
-  pickupDate: z.date(),
-  expectedDeliveryDate: z.date(),
+  pickupDate: z.date().optional(),
+  expectedDeliveryDate: z.date().optional(),
   division: z.string(),
-  tourType: z.string(),
-  status: z.enum(["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED", "PICK-UP", "RETURNED"]),
+  status: z.enum(["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED", "PICK-UP", "RETURNED"]).optional(),
   description: z.string().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
   isActive: z.boolean().optional(),
 });
 
@@ -40,7 +39,6 @@ export const updatePercelZodSchema = z.object({
   pickupDate: z.date().optional(),
   expectedDeliveryDate: z.date().optional(),
   division: z.string().optional(),
-  tourType: z.string().optional(),
   status: z.enum(["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED", "PICK-UP", "RETURNED"]).optional(),
   description: z.string().optional(),
   createdAt: z.date().optional(),

@@ -1,51 +1,52 @@
-import { Iparcels, IparcelsType } from "./percel.interface";
-import { Tour, TourType } from "./percel.mode";
+import { Iparcels } from "./percel.interface";
+import { Percel } from "./percel.mode";
+
 
 const createPercel = async (payload: Iparcels) => {
   const BaseSlug = payload.name.toLowerCase().split(" ").join("-");
   let slug = `${BaseSlug}-division`;
-  const existingPercel = await Tour.findOne({ where: { name: payload.name } });
+  const existingPercel = await Percel.findOne({ where: { name: payload.name } });
   if (existingPercel) {
     throw new Error("Percel with this slug already exists");
   }
   let count = 0;
-  while (await Tour.exists({ slug })) {
+  while (await Percel.exists({ slug })) {
     count++;
     slug = `${BaseSlug}-tour-${count}`;
   }
   payload.slug = slug;
   payload.isActive = true;
-  const tour = Tour.create(payload);
-  return tour;
+  const percel = Percel.create(payload);
+  return percel;
 };
 
-const getAllTours = async () => {
-  const tours = await Tour.find();
-  return tours;
+const getAllPercel = async () => {
+  const percel = await Percel.find();
+  return percel;
 };
 
 const getSingleTour = async (slug: string) => {
-  const tour = await Tour.findOne({ where: { slug } });
+  const tour = await Percel.findOne({ where: { slug } });
   if (!tour) {
     throw new Error("Tour not found");
   }
   return tour;
 };
 
-const createTourTypes = async (payload: IparcelsType) => {
-  const existingTourType = await TourType.findOne({
-    where: { name: payload.name },
-  });
-  if (existingTourType) {
-    throw new Error("Tour type with this name already exists");
-  }
-  const tourType = TourType.create(payload);
-  return tourType;
-};
+// const createTourTypes = async (payload: IparcelsType) => {
+//   const existingTourType = await TourType.findOne({
+//     where: { name: payload.name },
+//   });
+//   if (existingTourType) {
+//     throw new Error("Tour type with this name already exists");
+//   }
+//   const tourType = TourType.create(payload);
+//   return tourType;
+// };
 
 export const PercelService = {
   createPercel,
-  getAllTours,
+  getAllPercel,
   getSingleTour,
-  createTourTypes,
+  // createTourTypes,
 };

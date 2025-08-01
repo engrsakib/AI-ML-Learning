@@ -12,7 +12,7 @@ export enum status {
 export interface Iparcels {
   id?: string;
   name: string;
-  slug: string;
+  slug?: string;
   images?: string[];
   thumbnail?: string;
   senderName: string;
@@ -26,7 +26,6 @@ export interface Iparcels {
   pickupDate: Date;
   expectedDeliveryDate: Date;
   division: Types.ObjectId;
-  tourType: Types.ObjectId;
   status: status;
   description?: string;
   createdAt: Date;

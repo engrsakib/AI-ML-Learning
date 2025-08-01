@@ -71,20 +71,15 @@ const percelSchema = new Schema<Iparcels>(
     },
     pickupDate: {
       type: Date,
-      required: true,
+      required: false,
     },
     expectedDeliveryDate: {
       type: Date,
-      required: true,
+      required: false,
     },
     division: {
       type: Schema.Types.ObjectId,
       ref: "Division",
-      required: true,
-    },
-    tourType: {
-      type: Schema.Types.ObjectId,
-      ref: "TourType",
       required: true,
     },
     status: {
