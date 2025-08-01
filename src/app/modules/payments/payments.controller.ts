@@ -52,8 +52,27 @@ const cancelPayment = async (req: Request, res: Response) => {
   }
 };
 
+
+const initPayment = async (req: Request, res: Response) => {
+  const payload = req.body;
+  
+
+  try {
+    const result = await paymentsService.initPayment(payload.bookingId);
+
+    if (!result.success) {
+      res.status(404).json({ message: "Payment initialization failed." });
+    }
+
+    res.json({ message: "Payment initialized successfully.", data: result });
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message });
+  }
+};
+
 export const paymentsController = {
   successPayment,
   failedPayment,
   cancelPayment,
+  initPayment,
 };

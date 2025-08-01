@@ -1,6 +1,8 @@
 import { ISslCommerz } from "./sslCommerz.interface";
 import axios from "axios";
 const sslPaymentInit = async (payload: ISslCommerz) => {
+  
+
   try {
     const data = {
       store_id: process.env.SSL_COMMERZ_STORE_ID,
