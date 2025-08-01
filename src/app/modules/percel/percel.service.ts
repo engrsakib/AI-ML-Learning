@@ -38,12 +38,17 @@ const getAllPercel = async () => {
   return percel;
 };
 
-const getSingleParcel = async (slug: string) => {
-  const tour = await Percel.findOne({ where: { slug } });
-  if (!tour) {
-    throw new Error("Tour not found");
+const getSingleParcel = async (email: string) => {
+  const percel = await Percel.findOne({ senderEmail: email });
+  if (!percel) {
+    throw new Error("Parcel not found");
   }
-  return tour;
+  const totalParcels = await Percel.countDocuments({ senderEmail: email });
+  if (totalParcels === 0) {
+    throw new Error("No parcels found for this user");
+  }
+
+  return { percel, totalParcels };
 };
 
 // const createTourTypes = async (payload: IparcelsType) => {

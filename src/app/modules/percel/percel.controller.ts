@@ -37,7 +37,10 @@ const getSingleParcel = async (req: Request, res: Response) => {
     const parcel = await PercelService.getSingleParcel(decode.email);
     res.status(200).json({
       message: "Parcel retrieved successfully",
-      data: parcel,
+      metaData:{
+        total: parcel.totalParcels,
+      },
+      data: parcel.percel,
     });
   } catch (error) {
     throw new AppError(`Failed to retrieve parcel: ${error}`, 500);
