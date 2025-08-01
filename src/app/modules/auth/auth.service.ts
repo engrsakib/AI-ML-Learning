@@ -127,7 +127,8 @@ const resetPassword = async (oldPassword: string, newPassword: string, accessTok
   if (!isOldPasswordValid) {
     throw new AppError("Old password is incorrect", 401);
   }
-
+    
+  
   const isPasswordValid = await bcrypt.compare(
     newPassword,
     user.password,
