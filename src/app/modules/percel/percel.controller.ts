@@ -3,58 +3,58 @@ import AppError from "../../errorHelpers/appError";
 import { TourService } from "./percel.service";
 
 
-const createTour = async (req: Request, res: Response) => {
+const createPercel = async (req: Request, res: Response) => {
   try {
-    const newTour = await TourService.createTour(req.body);
+    const newParcel = await ParcelService.createParcel(req.body);
     res.status(201).json({
-      message: "Tour created successfully",
-      tour: newTour,
+      message: "Parcel created successfully",
+      parcel: newParcel,
     });
   } catch (error) {
-    throw new AppError(`Failed to create tour: ${error}`, 500);
+    throw new AppError(`Failed to create parcel: ${error}`, 500);
   }
 };
 
-const getAllTours = async (req: Request, res: Response) => {
+const getAllParcels = async (req: Request, res: Response) => {
   try {
-    const tours = await TourService.getAllTours();
+    const parcels = await ParcelService.getAllParcels();
     res.status(200).json({
-      message: "Tours retrieved successfully",
-      data:tours,
+      message: "Parcels retrieved successfully",
+      data: parcels,
     });
   } catch (error) {
-    throw new AppError(`Failed to retrieve tours: ${error}`, 500);
+    throw new AppError(`Failed to retrieve parcels: ${error}`, 500);
   }
 };
 
-const getSingleTour = async (req: Request, res: Response) => {
+const getSingleParcel = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const tour = await TourService.getSingleTour(slug);
+    const parcel = await ParcelService.getSingleParcel(slug);
     res.status(200).json({
-      message: "Tour retrieved successfully",
-      data: tour,
+      message: "Parcel retrieved successfully",
+      data: parcel,
     });
   } catch (error) {
-    throw new AppError(`Failed to retrieve tour: ${error}`, 500);
+    throw new AppError(`Failed to retrieve parcel: ${error}`, 500);
   }
 };
 
-const createTourTypes = async (req: Request, res: Response) => {
+const createParcelTypes = async (req: Request, res: Response) => {
   try {
-    const newTourType = await TourService.createTourTypes(req.body);
+    const newParcelType = await ParcelService.createParcelTypes(req.body);
     res.status(201).json({
-      message: "Tour type created successfully",
-      tourType: newTourType,
+      message: "Parcel type created successfully",
+      parcelType: newParcelType,
     });
   } catch (error) {
-    throw new AppError(`Failed to create tour type: ${error}`, 500);
+    throw new AppError(`Failed to create parcel type: ${error}`, 500);
   }
 };
 
-export const TourController = {
-  createTour,
-  getAllTours,
-  getSingleTour,
-  createTourTypes,
+export const ParcelController = {
+  createPercel,
+  getAllParcels,
+  getSingleParcel,
+  createParcelTypes,
 };

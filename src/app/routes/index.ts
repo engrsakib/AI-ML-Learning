@@ -4,7 +4,7 @@ import { AuthRoutes } from "../modules/auth/auth.routes";
 import { DivisionsRoutes } from "../modules/divisions/divisions.routes";
 import { bookingRouter } from "../modules/booking/booking.routes";
 import { paymentRoutes } from "../modules/payments/payment.routes";
-import { PercelRoutes } from "../modules/percel/percel.routes";
+import { ParcelRoutes } from "../modules/percel/percel.routes";
 
 export const router = Router();
 
@@ -23,7 +23,7 @@ const moduleRoutes = [
   },
   {
     path: "/parcels",
-    route: PercelRoutes,
+    route: ParcelRoutes,
   },
   {
     path: "/booking",
