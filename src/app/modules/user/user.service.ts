@@ -16,7 +16,10 @@ const createUser = async (payload: Partial<IUser>) => {
     throw new Error("User with this email already exists");
   }
 
-  const hashedPassword = await bcrypt.hash(password as string, Number(process.env.BCRYPT_SALT_ROUNDS) || 10);
+  const hashedPassword = await bcrypt.hash(
+    password as string,
+    Number(process.env.BCRYPT_SALT_ROUNDS) || 10,
+  );
 
   const user = new User({ ...userData, password: hashedPassword });
   const newUser = await User.create(user);
@@ -46,27 +49,18 @@ const updateUser = async (
     );
   }
   if (payload.role) {
-    if (decodedToken.role !== role.USER && decodedToken.role !== role.GUIDE) {
+    if (decodedToken.role !== role.ADMIN) {
       throw new AppError(
         "You do not have permission to update user roles",
         httpStatus.FORBIDDEN,
       );
     }
-    if (payload.role === role.SUPER_ADMIN || payload.role === role.ADMIN) {
-      throw new AppError(
-        "Cannot update user role to SUPERADMIN",
-        httpStatus.FORBIDDEN,
-      );
-    } 
   }
 
   if (payload.isActive || payload.isDeleted || payload.isVarified) {
-    if (
-      decodedToken.role !== role.SUPER_ADMIN &&
-      decodedToken.role !== role.ADMIN
-    ) {
+    if (decodedToken.role !== role.ADMIN) {
       throw new AppError(
-        "Only SUPERADMIN can update user active or deleted status",
+        "Only ADMIN can update user active or deleted status",
         httpStatus.FORBIDDEN,
       );
     }

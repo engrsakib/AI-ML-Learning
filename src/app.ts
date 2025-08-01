@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use("/api/v1", router);
 
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).json("Welcome to the Tour Management System");
+  res.status(200).json("Welcome to the Percel Booking Management System");
 });
 
 app.use(globalErrorHandler);

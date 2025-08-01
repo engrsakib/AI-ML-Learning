@@ -1,10 +1,9 @@
 import { Types } from "mongoose";
 
 export enum role{
-    USER = "USER",
+    SENDER = "SENDER",
     ADMIN = "ADMIN",
-    GUIDE = "GUIDE",
-    SUPER_ADMIN = "SUPER_ADMIN",
+    RECIVER = "RECIVER",
 }
 
 export interface IAuth {

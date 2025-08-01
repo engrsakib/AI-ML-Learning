@@ -12,7 +12,7 @@ const userSchema = new Schema<IUser>(
     role: {
       type: String,
       enum: Object.values(role),
-      default: role.USER,
+      default: role.SENDER,
       required: true,
     },
     isDeleted: { type: Boolean, default: false },
