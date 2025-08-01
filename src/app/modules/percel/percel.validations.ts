@@ -1,42 +1,53 @@
 import { z } from "zod";
 
-export const createTourZodSchema = z.object({
+export const createPercelZodSchema = z.object({
   name: z.string(),
-  description: z.string().optional(),
-  location: z.string().optional(),
-  costFrom: z.number().optional(),
-  startDate: z.string().optional().optional(),
-  endDate: z.string().optional().optional(),
-  tourType: z.string(), // <- changed here
-  included: z.array(z.string()).optional(),
-  excluded: z.array(z.string()).optional(),
-  amenities: z.array(z.string()).optional(),
-  tourPlan: z.array(z.string()).optional(),
-  maxGuest: z.number().optional(),
-  minAge: z.number().optional(),
+  slug: z.string(),
+  images: z.array(z.string()).optional(),
+  thumbnail: z.string().optional(),
+  senderName: z.string(),
+  senderPhone: z.string(),
+  senderAddress: z.string(),
+  reciverName: z.string(),
+  reciverPhone: z.string(),
+  reciverAddress: z.string(),
+  weight: z.number(),
+  price: z.number(),
+  pickupDate: z.date(),
+  expectedDeliveryDate: z.date(),
   division: z.string(),
-  departureLocation: z.string().optional(),
-  arrivalLocation: z.string().optional(),
-});
-
-export const updateTourZodSchema = z.object({
-  name: z.string().optional(),
+  tourType: z.string(),
+  status: z.enum(["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED", "PICK-UP", "RETURNED"]),
   description: z.string().optional(),
-  location: z.string().optional(),
-  costFrom: z.number().optional(),
-  startDate: z.string().optional().optional(),
-  endDate: z.string().optional().optional(),
-  tourType: z.string().optional(), // <- changed here
-  included: z.array(z.string()).optional(),
-  excluded: z.array(z.string()).optional(),
-  amenities: z.array(z.string()).optional(),
-  tourPlan: z.array(z.string()).optional(),
-  maxGuest: z.number().optional(),
-  minAge: z.number().optional(),
-  departureLocation: z.string().optional(),
-  arrivalLocation: z.string().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  isActive: z.boolean().optional(),
 });
 
-export const createTourTypeZodSchema = z.object({
+export const updatePercelZodSchema = z.object({
+  name: z.string().optional(),
+  slug: z.string().optional(),
+  images: z.array(z.string()).optional(),
+  thumbnail: z.string().optional(),
+  senderName: z.string().optional(),
+  senderPhone: z.string().optional(),
+  senderAddress: z.string().optional(),
+  reciverName: z.string().optional(),
+  reciverPhone: z.string().optional(),
+  reciverAddress: z.string().optional(),
+  weight: z.number().optional(),
+  price: z.number().optional(),
+  pickupDate: z.date().optional(),
+  expectedDeliveryDate: z.date().optional(),
+  division: z.string().optional(),
+  tourType: z.string().optional(),
+  status: z.enum(["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED", "PICK-UP", "RETURNED"]).optional(),
+  description: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+  isActive: z.boolean().optional(),
+});
+
+export const createPercelTypeZodSchema = z.object({
   name: z.string(),
 });

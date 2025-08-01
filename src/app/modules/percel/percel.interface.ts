@@ -24,7 +24,7 @@ export interface Iparcels {
   weight: number;
   price: number;
   pickupDate: Date;
-
+  expectedDeliveryDate: Date;
   division: Types.ObjectId;
   tourType: Types.ObjectId;
   status: status;
