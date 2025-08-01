@@ -17,10 +17,12 @@ export interface Iparcels {
   thumbnail?: string;
   senderName: string;
   senderPhone: string;
+  senderEmail?: string;
   senderAddress: string;
   reciverName: string;
   reciverPhone: string;
   reciverAddress: string;
+  reciverEmail?: string;
   weight: number;
   price: number;
   pickupDate: Date;

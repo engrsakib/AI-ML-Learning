@@ -20,7 +20,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
       if (!user || !user.phone || !user.address) {
         throw new AppError(
           "User must have a phone number and address to create a booking.",
-          httpStatus.BAD_REQUEST
+          httpStatus.BAD_REQUEST,
         );
       }
 

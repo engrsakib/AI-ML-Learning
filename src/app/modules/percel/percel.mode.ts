@@ -39,18 +39,28 @@ const percelSchema = new Schema<Iparcels>(
     },
     senderName: {
       type: String,
-      required: true,
+      required: false,
     },
     senderPhone: {
       type: String,
-      required: true,
+      required: false,
     },
     senderAddress: {
       type: String,
-      required: true,
+      required: false,
     },
     reciverName: {
       type: String,
+      required: true,
+    },
+    senderEmail: {
+      type: String,
+      default: null,
+      required: false,
+    },
+    reciverEmail: {
+      type: String,
+      default: null,
       required: true,
     },
     reciverPhone: {

@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import AppError from "../../errorHelpers/appError";
 import { PercelService } from "./percel.service";
+import { decodedToken } from "../../util/decodedToken";
 
 const createPercel = async (req: Request, res: Response) => {
   try {
-    const newParcel = await PercelService.createPercel(req.body);
+    const token = req.headers.authorization;
+    const decode = decodedToken(token as string);
+    const newParcel = await PercelService.createPercel(req.body, decode.email);
     res.status(201).json({
       message: "Parcel created successfully",
       parcel: newParcel,
@@ -28,8 +31,10 @@ const getAllParcels = async (req: Request, res: Response) => {
 
 const getSingleParcel = async (req: Request, res: Response) => {
   try {
-    const { slug } = req.params;
-    const parcel = await ParcelService.getSingleParcel(slug);
+    const token = req.headers.authorization;
+    const decode = decodedToken(token as string);
+    
+    const parcel = await PercelService.getSingleParcel(decode.email);
     res.status(200).json({
       message: "Parcel retrieved successfully",
       data: parcel,
