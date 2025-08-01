@@ -56,7 +56,7 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
   };
 };
 
-// refresh token logic
+// refresh token logic  
 const getNewAccessToken = async (refreshToken: string) => {
   if (!refreshToken) {
     throw new AppError("Refresh token is required", 400);
