@@ -8,13 +8,13 @@ const successPayment = async (req: Request, res: Response) => {
     const result = await paymentsService.successPayment(query as Record<string, string>);
 
     if (!result.success) {
-      return res.status(404).json({ message: "Payment or booking not found." });
+      res.status(404).json({ message: "Payment or booking not found." });
     }
 
     // ✅ শুধু redirect করুন, frontend নিজে জানবে success
-    return res.redirect(`${process.env.SSL_COMMERZ_SUCCESS_FRONTEND_URL}?transactionId=${query.transactionId}`);
+    res.redirect(`${process.env.SSL_COMMERZ_SUCCESS_FRONTEND_URL}?transactionId=${query.transactionId}`);
   } catch (error) {
-    return res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };
 
@@ -25,13 +25,13 @@ const failedPayment = async (req: Request, res: Response) => {
     const result = await paymentsService.failedPayment(query as Record<string, string>);
 
     if (!result.success) {
-      return res.status(404).json({ message: "Payment or booking not found." });
+      res.status(404).json({ message: "Payment or booking not found." });
     }
 
     // ✅ শুধু redirect করুন, frontend নিজে জানবে success
-    return res.redirect(`${process.env.SSL_COMMERZ_FAIL_FRONTEND_URL}?transactionId=${query.transactionId}`);
+    res.redirect(`${process.env.SSL_COMMERZ_FAIL_FRONTEND_URL}?transactionId=${query.transactionId}`);
   } catch (error) {
-    return res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };
 
@@ -42,13 +42,13 @@ const cancelPayment = async (req: Request, res: Response) => {
     const result = await paymentsService.cancelPayment(query as Record<string, string>);
 
     if (!result.success) {
-      return res.status(404).json({ message: "Payment or booking not found." });
+      res.status(404).json({ message: "Payment or booking not found." });
     }
 
     // ✅ শুধু redirect করুন, frontend নিজে জানবে success
-    return res.redirect(`${process.env.SSL_COMMERZ_CANCEL_FRONTEND_URL}?transactionId=${query.transactionId}`);
+    res.redirect(`${process.env.SSL_COMMERZ_CANCEL_FRONTEND_URL}?transactionId=${query.transactionId}`);
   } catch (error) {
-    return res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };
 
