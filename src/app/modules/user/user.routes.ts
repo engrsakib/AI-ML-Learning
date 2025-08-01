@@ -3,6 +3,7 @@ import { UserController } from "./user.controller";
 import { createUserZodSchema, updateUserZodSchema } from "./user.validations";
 import { validateRequest } from "../../middleware/validateRequest";
 import { verifyToken } from "../../util/verifyToken";
+import { role } from "./user.interface";
 
 const router = Router();
 
@@ -12,7 +13,7 @@ router.post(
   UserController.createUser,
 );
 router.get(
-  "/",verifyToken("ADMIN", "SUPPERADMIN", "USER"),
+  "/",verifyToken(role.ADMIN),
   UserController.getAllUsers,
 );
 router.patch(
