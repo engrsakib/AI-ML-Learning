@@ -1,7 +1,8 @@
 import { model, Schema } from "mongoose";
-import { Itour, ItourType } from "./percel.interface";
+import { Iparcels, IparcelsType, status } from "./percel.interface";
 
-const tourTypeSchema = new Schema<ItourType>(
+// TourType Schema
+const tourTypeSchema = new Schema<IparcelsType>(
   {
     name: {
       type: String,
@@ -12,22 +13,21 @@ const tourTypeSchema = new Schema<ItourType>(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
-const TourType = model<ItourType>("TourType", tourTypeSchema);
+const TourType = model<IparcelsType>("TourType", tourTypeSchema);
 
-const tourSchema = new Schema<Itour>(
+// Parcel Schema (percelSchema) - updated as per your interface
+const percelSchema = new Schema<Iparcels>(
   {
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     slug: {
       type: String,
       required: true,
-      unique: true,
     },
     images: {
       type: [String],
@@ -37,61 +37,45 @@ const tourSchema = new Schema<Itour>(
       type: String,
       default: null,
     },
-    location: {
+    senderName: {
       type: String,
-      default: null,
+      required: true,
     },
-    costFrom: {
-      type: Number,
-      default: 0,
-    },
-    costTo: {
-      type: Number,
-      default: 0,
-    },
-    startDate: {
-      type: Date,
-      default: null,
-    },
-    endDate: {
-      type: Date,
-      default: null,
-    },
-    included: {
-      type: [String],
-      default: [],
-    },
-    excluded: {
-      type: [String],
-      default: [],
-    },
-    amenities: {
-      type: [String],
-      default: [],
-    },
-    itinerary: {
+    senderPhone: {
       type: String,
-      default: null,
+      required: true,
     },
-    tourPlan: {
-      type: [String],
-      default: [],
+    senderAddress: {
+      type: String,
+      required: true,
     },
-    maxGests: {
+    reciverName: {
+      type: String,
+      required: true,
+    },
+    reciverPhone: {
+      type: String,
+      required: true,
+    },
+    reciverAddress: {
+      type: String,
+      required: true,
+    },
+    weight: {
       type: Number,
-      default: 0,
+      required: true,
     },
-    gestCount: {
+    price: {
       type: Number,
-      default: 0,
+      required: true,
     },
-    minAge: {
-      type: Number,
-      default: 0,
+    pickupDate: {
+      type: Date,
+      required: true,
     },
-    maxAge: {
-      type: Number,
-      default: 100,
+    expectedDeliveryDate: {
+      type: Date,
+      required: true,
     },
     division: {
       type: Schema.Types.ObjectId,
@@ -103,16 +87,26 @@ const tourSchema = new Schema<Itour>(
       ref: "TourType",
       required: true,
     },
+    status: {
+      type: String,
+      enum: Object.values(status),
+      required: true,
+      default: status.PENDING,
+    },
     description: {
       type: String,
       default: null,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
-export const Tour = model<Itour>("Tour", tourSchema);
+export const Percel = model<Iparcels>("Percel", percelSchema);
 export { TourType, tourTypeSchema };

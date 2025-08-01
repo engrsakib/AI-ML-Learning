@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import AppError from "../../errorHelpers/appError";
-import { TourService } from "./percel.service";
+import { PercelService } from "./percel.service";
 
 
 const createPercel = async (req: Request, res: Response) => {
   try {
-    const newParcel = await ParcelService.createParcel(req.body);
+    const newParcel = await PercelService.createPercel(req.body);
     res.status(201).json({
       message: "Parcel created successfully",
       parcel: newParcel,
@@ -17,7 +17,7 @@ const createPercel = async (req: Request, res: Response) => {
 
 const getAllParcels = async (req: Request, res: Response) => {
   try {
-    const parcels = await ParcelService.getAllParcels();
+    const parcels = await PercelService.getAllParcels();
     res.status(200).json({
       message: "Parcels retrieved successfully",
       data: parcels,

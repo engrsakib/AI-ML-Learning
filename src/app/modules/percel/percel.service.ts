@@ -1,12 +1,12 @@
-import { Itour, ItourType } from "./percel.interface";
+import { Iparcels, IparcelsType } from "./percel.interface";
 import { Tour, TourType } from "./percel.mode";
 
-const createTour = async (payload: Itour) => {
+const createPercel = async (payload: Iparcels) => {
   const BaseSlug = payload.name.toLowerCase().split(" ").join("-");
   let slug = `${BaseSlug}-division`;
-  const existingTour = await Tour.findOne({ where: { name: payload.name } });
-  if (existingTour) {
-    throw new Error("Tour with this slug already exists");
+  const existingPercel = await Tour.findOne({ where: { name: payload.name } });
+  if (existingPercel) {
+    throw new Error("Percel with this slug already exists");
   }
   let count = 0;
   while (await Tour.exists({ slug })) {
@@ -32,7 +32,7 @@ const getSingleTour = async (slug: string) => {
   return tour;
 };
 
-const createTourTypes = async (payload: ItourType) => {
+const createTourTypes = async (payload: IparcelsType) => {
   const existingTourType = await TourType.findOne({
     where: { name: payload.name },
   });
@@ -43,8 +43,8 @@ const createTourTypes = async (payload: ItourType) => {
   return tourType;
 };
 
-export const TourService = {
-  createTour,
+export const PercelService = {
+  createPercel,
   getAllTours,
   getSingleTour,
   createTourTypes,
