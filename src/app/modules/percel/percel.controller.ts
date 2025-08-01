@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import AppError from "../../errorHelpers/appError";
-import { TourService } from "./tour.service";
+import { TourService } from "./percel.service";
 
 
 const createTour = async (req: Request, res: Response) => {
