@@ -22,7 +22,7 @@ const moduleRoutes = [
     route: DivisionsRoutes,
   },
   {
-    path: "/parcel",
+    path: "/parcels",
     route: PercelRoutes,
   },
   {

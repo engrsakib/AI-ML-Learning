@@ -1,34 +1,39 @@
 import { Types } from "mongoose";
 
-export interface Itour{
-    id?: string;
-    name: string;
-    slug: string;
-    images?: string[];
-    thumbnail?: string;
-    location?: string;
-    costFrom?: number;
-    costTo?: number;
-    startDate?: Date;
-    endDate?: Date;
-    included?: string[];
-    excluded?: string[];
-    amenities?: string[];
-    itinerary?: string;
-    tourPlan?: string[];
-    maxGests?: number;
-    gestCount?: number;
-    minAge?: number;
-    maxAge?: number;
-    division: Types.ObjectId;
-    tourType: Types.ObjectId;
-    description?: string;
-    createdAt: Date;
-    updatedAt: Date;
-    isActive?: boolean;
+export enum status {
+  PENDING = "PENDING",
+  IN_TRANSIT = "IN_TRANSIT",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
+  PICK_UP = "PICK-UP",
+  RETURNED = "RETURNED",
 }
 
-export interface ItourType {
-    name: string;
-    
+export interface Iparcels {
+  id?: string;
+  name: string;
+  slug: string;
+  images?: string[];
+  thumbnail?: string;
+  senderName: string;
+  senderPhone: string;
+  senderAddress: string;
+  reciverName: string;
+  reciverPhone: string;
+  reciverAddress: string;
+  weight: number;
+  price: number;
+  pickupDate: Date;
+
+  division: Types.ObjectId;
+  tourType: Types.ObjectId;
+  status: status;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  isActive?: boolean;
+}
+
+export interface IparcelsType {
+  name: string;
 }
