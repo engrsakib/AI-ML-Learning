@@ -2,9 +2,9 @@ import { Router } from "express";
 import { UserRoutes } from "../modules/user/user.routes";
 import { AuthRoutes } from "../modules/auth/auth.routes";
 import { DivisionsRoutes } from "../modules/divisions/divisions.routes";
-import { TourRoutes } from "../modules/percel/percel.routes";
 import { bookingRouter } from "../modules/booking/booking.routes";
 import { paymentRoutes } from "../modules/payments/payment.routes";
+import { PercelRoutes } from "../modules/percel/percel.routes";
 
 export const router = Router();
 
@@ -22,8 +22,8 @@ const moduleRoutes = [
     route: DivisionsRoutes,
   },
   {
-    path: "/tours",
-    route: TourRoutes,
+    path: "/parcel",
+    route: PercelRoutes,
   },
   {
     path: "/booking",
