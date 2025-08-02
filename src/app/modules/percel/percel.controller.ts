@@ -58,10 +58,16 @@ const updateParcelStatus = catchAsync(async (req: Request, res: Response) => {
 
 const cancelParcel = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  if (!req.user) {
-    throw new Error("Unauthorized: User not found in request");
+  const token = req.headers.authorization;
+  if (!token) {
+    throw new Error("Unauthorized: No token provided");
   }
-  const senderId = req.user._id;
+  const decode = decodedToken(token as string);
+
+  if (!decode) {
+    throw new Error("Unauthorized: Invalid token");
+  }
+  const senderId = decode.userId;
 
   const result = await ParcelServices.cancelParcel(id, senderId);
 
