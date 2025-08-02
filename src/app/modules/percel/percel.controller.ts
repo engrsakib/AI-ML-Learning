@@ -3,16 +3,18 @@ import httpStatus from "http-status-codes";
 import { catchAsync } from "../../util/catchAsync";
 import { sendResponse } from "../../util/sendResponse";
 import { ParcelServices } from "./percel.service";
+import { decodedToken } from "../../util/decodedToken";
 
 
 
 const createParcel = catchAsync(
   async (req: Request, res: Response) => {
-    if (!req.user) {
-      throw new Error("Unauthorized: User not found in request");
-    }
+    const token = req.headers.authorization;
+    const decode = decodedToken(token as string);
 
-    const senderId = req.user._id;
+    
+
+    const senderId = decode.userId;
 
     const parcel = await ParcelServices.createParcel(req.body, senderId);
 
