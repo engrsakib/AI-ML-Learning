@@ -1,67 +1,140 @@
 import { Request, Response } from "express";
-import AppError from "../../errorHelpers/appError";
-import { PercelService } from "./percel.service";
-import { decodedToken } from "../../util/decodedToken";
+import httpStatus from "http-status-codes";
+import { catchAsync } from "../../util/catchAsync";
+import { sendResponse } from "../../util/sendResponse";
+import { ParcelServices } from "./percel.service";
 
-const createPercel = async (req: Request, res: Response) => {
-  try {
-    const token = req.headers.authorization;
-    const decode = decodedToken(token as string);
-    const newParcel = await PercelService.createPercel(req.body, decode.email);
-    res.status(201).json({
-      message: "Parcel created successfully",
-      parcel: newParcel,
+
+
+const createParcel = catchAsync(
+  async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new Error("Unauthorized: User not found in request");
+    }
+
+    const senderId = req.user._id;
+
+    const parcel = await ParcelServices.createParcel(req.body, senderId);
+
+    sendResponse(res, {
+      success: true,
+      status: httpStatus.CREATED,
+      message: "Parcel Created Successfully",
+      data: parcel,
     });
-  } catch (error) {
-    throw new AppError(`Failed to create parcel: ${error}`, 500);
-  }
-};
+  },
+);
 
-const getAllParcels = async (req: Request, res: Response) => {
-  try {
-    const parcels = await PercelService.getAllPercel();
-    res.status(200).json({
-      message: "Parcels retrieved successfully",
-      data: parcels,
+const updateParcelStatus = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!req.user) {
+    throw new Error("Unauthorized: User not found in request");
+  }
+  const adminId = req.user._id;
+  const { status, location, note } = req.body;
+
+  const result = await ParcelServices.updateParcelStatus(
+    id,
+    { status, location, note },
+    adminId,
+  );
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: "Parcel status updated successfully",
+    data: result,
+  });
+});
+
+const cancelParcel = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!req.user) {
+    throw new Error("Unauthorized: User not found in request");
+  }
+  const senderId = req.user._id;
+
+  const result = await ParcelServices.cancelParcel(id, senderId);
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: "Parcel cancelled successfully",
+    data: result,
+  });
+});
+
+const getAllParcel = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await ParcelServices.getAllParcels();
+
+    sendResponse(res, {
+      success: true,
+      status: httpStatus.CREATED,
+      message: "All Parcel Retrieved Successfully",
+      data: result,
     });
-  } catch (error) {
-    throw new AppError(`Failed to retrieve parcels: ${error}`, 500);
-  }
-};
+  },
+);
 
-const getSingleParcel = async (req: Request, res: Response) => {
-  try {
-    const token = req.headers.authorization;
-    const decode = decodedToken(token as string);
-    
-    const parcel = await PercelService.getSingleParcel(decode.email);
-    res.status(200).json({
-      message: "Parcel retrieved successfully",
-      metaData:{
-        total: parcel.totalParcels,
-      },
-      data: parcel.percel,
-    });
-  } catch (error) {
-    throw new AppError(`Failed to retrieve parcel: ${error}`, 500);
+const getSingleParcel = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!req.user) {
+    throw new Error("Unauthorized: User not found in request");
   }
-};
+  const user = req.user;
 
-const createParcelTypes = async (req: Request, res: Response) => {
-  try {
-    const newParcelType = await ParcelService.createParcelTypes(req.body);
-    res.status(201).json({
-      message: "Parcel type created successfully",
-      parcelType: newParcelType,
-    });
-  } catch (error) {
-    throw new AppError(`Failed to create parcel type: ${error}`, 500);
+  const result = await ParcelServices.getSingleParcel(id, user);
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: "Single Parcel Retrieved Successfully",
+    data: result,
+  });
+});
+
+const getMyParcels = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new Error("Unauthorized: User not found in request");
   }
-};
+  const senderId = req.user._id;
 
-export const ParcelController = {
-  createPercel,
-  getAllParcels,
+  const result = await ParcelServices.getMyParcels(senderId);
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: "Sender's parcels retrieved successfully",
+    data: result,
+  });
+});
+
+/**
+ * Controller for retrieving parcels intended for the authenticated receiver.
+ */
+const getIncomingParcels = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new Error("Unauthorized: User not found in request");
+  }
+  const receiverId = req.user._id;
+  const result = await ParcelServices.getIncomingParcels(receiverId);
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: "Receiver's incoming parcels retrieved successfully",
+    data: result,
+  });
+});
+
+
+
+export const ParcelControllers = {
+  createParcel,
+  getAllParcel,
+  updateParcelStatus,
+  cancelParcel,
   getSingleParcel,
-  createParcelTypes,
+  getMyParcels,
+  getIncomingParcels,
 };

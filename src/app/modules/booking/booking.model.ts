@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { BookingStatus, IBooking } from "./booking.interface";
-import { Percel } from "../percel/percel.mode";
+import { Parcel } from "../percel/percel.mode";
+
 
 
 const bookingSchema = new Schema<IBooking>(
@@ -12,7 +13,7 @@ const bookingSchema = new Schema<IBooking>(
     },
     tour: {
       type: Schema.Types.ObjectId,
-      ref: Percel.modelName,
+      ref: Parcel.modelName,
       required: true,
     },
     payment: {

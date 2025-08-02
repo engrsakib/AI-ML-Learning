@@ -1,73 +1,55 @@
 import { model, Schema } from "mongoose";
-import { Iparcels, IparcelsType, status } from "./percel.interface";
+import { IParcel, IParcelStatus, IStatusLog } from "./percel.interface";
 
-// TourType Schema
-const tourTypeSchema = new Schema<IparcelsType>(
+
+const statusLogSchema = new Schema<IStatusLog>(
   {
-    name: {
+    status: {
+      type: String,
+      enum: Object.values(IParcelStatus),
+      required: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+      required: true,
+    },
+    location: {
+      type: String,
+      trim: true,
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    note: {
+      type: String,
+      trim: true,
+    },
+  },
+  { _id: false }, 
+);
+
+const parcelSchema = new Schema<IParcel>(
+  {
+    trackingId: {
       type: String,
       required: true,
       unique: true,
+      trim: true,
     },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  },
-);
-
-const TourType = model<IparcelsType>("TourType", tourTypeSchema);
-
-// Parcel Schema (percelSchema) - updated as per your interface
-const percelSchema = new Schema<Iparcels>(
-  {
-    name: {
-      type: String,
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
-    slug: {
-      type: String,
-      required: true,
+    receiver: {
+      name: { type: String, required: true, trim: true },
+      phone: { type: String, required: true, trim: true },
+      address: { type: String, required: true, trim: true },
+      userId: { type: Schema.Types.ObjectId, ref: "User" }, 
     },
-    images: {
-      type: [String],
-      default: [],
-    },
-    thumbnail: {
-      type: String,
-      default: null,
-    },
-    senderName: {
-      type: String,
-      required: false,
-    },
-    senderPhone: {
-      type: String,
-      required: false,
-    },
-    senderAddress: {
-      type: String,
-      required: false,
-    },
-    reciverName: {
-      type: String,
-      required: true,
-    },
-    senderEmail: {
-      type: String,
-      default: null,
-      required: false,
-    },
-    reciverEmail: {
-      type: String,
-      default: null,
-      required: true,
-    },
-    reciverPhone: {
-      type: String,
-      required: true,
-    },
-    reciverAddress: {
+    parcelType: {
       type: String,
       required: true,
     },
@@ -75,43 +57,51 @@ const percelSchema = new Schema<Iparcels>(
       type: Number,
       required: true,
     },
-    price: {
+    deliveryAddress: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    currentStatus: {
+      type: String,
+      enum: Object.values(IParcelStatus),
+      default: IParcelStatus.Requested,
+      required: true,
+    },
+    parcelFee: {
       type: Number,
-      required: true,
     },
-    pickupDate: {
+    estimatedDeliveryDate: {
       type: Date,
-      required: false,
     },
-    expectedDeliveryDate: {
-      type: Date,
-      required: false,
-    },
-    division: {
-      type: Schema.Types.ObjectId,
-      ref: "Division",
-      required: true,
-    },
-    status: {
-      type: String,
-      enum: Object.values(status),
-      required: true,
-      default: status.PENDING,
-    },
-    description: {
-      type: String,
-      default: null,
-    },
-    isActive: {
+    isCancelled: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    isDelivered: {
+      type: Boolean,
+      default: false,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    statusLogs: {
+      type: [statusLogSchema],
+      required: true,
+      default: [],
     },
   },
   {
-    timestamps: true,
+    timestamps: true, 
     versionKey: false,
+    toJSON: {
+      virtuals: true,
+    },
   },
 );
 
-export const Percel = model<Iparcels>("Percel", percelSchema);
-export { TourType, tourTypeSchema };
+
+
+
+export const Parcel = model<IParcel>("Parcel", parcelSchema);

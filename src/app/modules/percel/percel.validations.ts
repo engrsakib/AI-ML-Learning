@@ -1,55 +1,42 @@
+// src/modules/parcel/parcel.validation.ts
+
 import { z } from "zod";
+import { IParcelStatus } from "./percel.interface";
 
-export const createPercelZodSchema = z.object({
-  name: z.string(),
-  slug: z.string().optional(),
-  images: z.array(z.string()).optional(),
-  thumbnail: z.string().optional(),
-  senderName: z.string().optional(),
-  senderPhone: z.string().optional(),
-  senderAddress: z.string().optional(),
-  reciverName: z.string(),
-  reciverPhone: z.string(),
-  reciverEmail: z.string().optional(),
-  senderEmail: z.string().optional(),
-  reciverAddress: z.string(),
-  weight: z.number(),
-  price: z.number(),
-  pickupDate: z.date().optional(),
-  expectedDeliveryDate: z.date().optional(),
-  division: z.string(),
-  status: z.enum(["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED", "PICK-UP", "RETURNED"]).optional(),
-  description: z.string().optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  isActive: z.boolean().optional(),
+export const createParcelZodSchema = z.object({
+  receiver: z
+    .object({
+      name: z
+        .string()
+        .min(3, "Name must be at least 3 characters long")
+        .max(50, "Receiver name cannot exceed 50 characters"),
+      phone: z
+        .string()
+        .regex(/^01[0-9]{9}$/, "Invalid Bangladeshi phone number")
+        .min(11, "Phone number must be 11 digits")
+        .max(11, "Phone number must be 11 digits"),
+      address: z
+        .string()
+        .min(1, "Receiver address is required")
+        .max(200, "Receiver address cannot exceed 200 characters"),
+      userId: z.string().optional(),
+    })
+    .strict(), // .strict() ensures no extra properties are allowed
+  parcelType: z
+    .string()
+    .min(1, "Parcel type is required")
+    .max(50, "Parcel type cannot exceed 50 characters"),
+  weight: z.number().positive("Weight must be a positive number"),
+  deliveryAddress: z
+    .string()
+    .min(1, "Delivery address is required")
+    .max(200, "Delivery address cannot exceed 200 characters"),
 });
 
-export const updatePercelZodSchema = z.object({
-  name: z.string().optional(),
-  slug: z.string().optional(),
-  images: z.array(z.string()).optional(),
-  thumbnail: z.string().optional(),
-  senderName: z.string().optional(),
-  senderPhone: z.string().optional(),
-  senderAddress: z.string().optional(),
-  reciverName: z.string().optional(),
-  reciverPhone: z.string().optional(),
-  reciverEmail: z.string().optional(),
-  senderEmail: z.string().optional(),
-  reciverAddress: z.string().optional(),
-  weight: z.number().optional(),
-  price: z.number().optional(),
-  pickupDate: z.date().optional(),
-  expectedDeliveryDate: z.date().optional(),
-  division: z.string().optional(),
-  status: z.enum(["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED", "PICK-UP", "RETURNED"]).optional(),
-  description: z.string().optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  isActive: z.boolean().optional(),
+export const updateParcelStatusZodSchema = z.object({
+  status: z.enum([...Object.values(IParcelStatus)] as [string, ...string[]]),
+  location: z.string().min(1, "Location cannot be empty").optional(),
+  note: z.string().min(1, "Note cannot be empty").optional(),
 });
 
-export const createPercelTypeZodSchema = z.object({
-  name: z.string(),
-});
+export const cancelParcelZodSchema = z.object({});
