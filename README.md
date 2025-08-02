@@ -121,5 +121,6 @@ Designed for a parcel delivery system, it allows users to perform various tasks 
 
 **Live Link:** [https://delivedge-r5e7tgc0l-engrsakib-projects.vercel.app/](https://delivedge-r5e7tgc0l-engrsakib-projects.vercel.app/)  
 **Demo Video:** [Project Overview & Demo (LinkedIn)](https://www.linkedin.com/posts/engrsakib_delivedge-parcel-booking-system-project-activity-7357434464966238210-KvrE?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVmnvABBjY2I6i0j9pRy_jfxnOKpinccD4)
+**PostMan:** [Postman](https://drive.google.com/file/d/143kVUbPJ6fc8TiRfk3WQC2XlijAtn95_/view?usp=sharing)
 
 ---
