@@ -6,8 +6,8 @@ import httpStatus from "http-status-codes";
 import { Booking } from "./booking.model";
 import { Payment } from "../payments/payment.model";
 import { PaymentStatus } from "../payments/payment.interface";
-import { Tour } from "../percel/percel.mode";
 import { sslCommerzService } from "../sslCommerz/sslCommerze.service";
+import { Parcel } from "../percel/percel.mode";
 
 const createBooking = async (payload: Partial<IBooking>, userId: string) => {
   try {
@@ -24,15 +24,15 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
         );
       }
 
-      const tour = await Tour.findById(payload.tour).select("costFrom");
-      if (!tour?.costFrom) {
+      const parcel = await Parcel.findById(payload.tour).select("costFrom");
+      if (!parcel?.costFrom) {
         throw new AppError(
-          "Tour must have a cost to create a booking.",
-          httpStatus.BAD_REQUEST
+          "Parcel must have a cost to create a booking.",
+          httpStatus.BAD_REQUEST,
         );
       }
 
-      const amount = Number(tour.costFrom) * Number(payload.guestCount);
+      const amount = Number(parcel.costFrom) * Number(payload.guestCount);
 
       const booking = await Booking.create(
         [
@@ -42,13 +42,13 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
             status: BookingStatus.PENDING,
           },
         ],
-        { session }
+        { session },
       );
 
       if (!booking) {
         throw new AppError(
           "Booking creation failed.",
-          httpStatus.INTERNAL_SERVER_ERROR
+          httpStatus.INTERNAL_SERVER_ERROR,
         );
       }
 
@@ -61,13 +61,13 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
             amount: amount,
           },
         ],
-        { session }
+        { session },
       );
 
       if (!payment) {
         throw new AppError(
           "Payment creation failed.",
-          httpStatus.INTERNAL_SERVER_ERROR
+          httpStatus.INTERNAL_SERVER_ERROR,
         );
       }
 
@@ -76,7 +76,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
         {
           payment: payment[0]._id,
         },
-        { new: true, runValidators: true, session }
+        { new: true, runValidators: true, session },
       )
         .populate("user", "name email phone address")
         .populate("tour", "name maxGests")
@@ -85,7 +85,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
       if (!updatedBooking) {
         throw new AppError(
           "Booking update failed.",
-          httpStatus.INTERNAL_SERVER_ERROR
+          httpStatus.INTERNAL_SERVER_ERROR,
         );
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -119,7 +119,7 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
   } catch (error) {
     throw new AppError(
       `Error creating booking. ${error}`,
-      httpStatus.INTERNAL_SERVER_ERROR
+      httpStatus.INTERNAL_SERVER_ERROR,
     );
   }
 };

@@ -31,7 +31,7 @@ Designed for a parcel delivery system, it allows users to perform various tasks 
 1. **Clone the Repository:**
    ```sh
    git clone <your-repo-url>
-   cd DelivEdge---A-parcel-Booking-System-
+   cd delivedge-a-parcel-booking-system
    ```
 
 2. **Install Dependencies:**
@@ -119,7 +119,7 @@ Designed for a parcel delivery system, it allows users to perform various tasks 
 
 ## 📝 Demo & Video
 
-**Live Link:** [MARKED FOR LATER]  
-**Demo Video:** [MARKED FOR LATER]
+**Live Link:** [https://delivedge-r5e7tgc0l-engrsakib-projects.vercel.app/](https://delivedge-r5e7tgc0l-engrsakib-projects.vercel.app/)  
+**Demo Video:** [Project Overview & Demo (LinkedIn)](https://www.linkedin.com/posts/engrsakib_delivedge-parcel-booking-system-project-activity-7357434464966238210-KvrE?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVmnvABBjY2I6i0j9pRy_jfxnOKpinccD4)
 
 ---

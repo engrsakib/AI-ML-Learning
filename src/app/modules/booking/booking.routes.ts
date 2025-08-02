@@ -6,7 +6,7 @@ import { validateRequest } from "../../middleware/validateRequest";
 import { createBookingZodSchema } from "./booking.validations";
 
 const router = Router();
-router.post("/create", verifyToken(role.ADMIN, role.SUPER_ADMIN, role.USER), validateRequest(createBookingZodSchema), bookingController.createBooking);
+router.post("/create", verifyToken(role.ADMIN), validateRequest(createBookingZodSchema), bookingController.createBooking);
 
 
 
