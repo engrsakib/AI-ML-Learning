@@ -5,34 +5,41 @@ import { sendResponse } from "../../util/sendResponse";
 import { ParcelServices } from "./percel.service";
 import { decodedToken } from "../../util/decodedToken";
 
+const createParcel = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    throw new Error("Unauthorized: No token provided");
+  }
+  const decode = decodedToken(token as string);
 
+  if (!decode) {
+    throw new Error("Unauthorized: Invalid token");
+  }
 
-const createParcel = catchAsync(
-  async (req: Request, res: Response) => {
-    const token = req.headers.authorization;
-    const decode = decodedToken(token as string);
+  const senderId = decode.userId;
 
-    
+  const parcel = await ParcelServices.createParcel(req.body, senderId);
 
-    const senderId = decode.userId;
-
-    const parcel = await ParcelServices.createParcel(req.body, senderId);
-
-    sendResponse(res, {
-      success: true,
-      status: httpStatus.CREATED,
-      message: "Parcel Created Successfully",
-      data: parcel,
-    });
-  },
-);
+  sendResponse(res, {
+    success: true,
+    status: httpStatus.CREATED,
+    message: "Parcel Created Successfully",
+    data: parcel,
+  });
+});
 
 const updateParcelStatus = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  if (!req.user) {
-    throw new Error("Unauthorized: User not found in request");
+  const token = req.headers.authorization;
+  if (!token) {
+    throw new Error("Unauthorized: No token provided");
   }
-  const adminId = req.user._id;
+  const decode = decodedToken(token as string);
+
+  if (!decode) {
+    throw new Error("Unauthorized: Invalid token");
+  }
+  const adminId = decode.userId;
   const { status, location, note } = req.body;
 
   const result = await ParcelServices.updateParcelStatus(
@@ -66,18 +73,16 @@ const cancelParcel = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllParcel = catchAsync(
-  async (req: Request, res: Response) => {
-    const result = await ParcelServices.getAllParcels();
+const getAllParcel = catchAsync(async (req: Request, res: Response) => {
+  const result = await ParcelServices.getAllParcels();
 
-    sendResponse(res, {
-      success: true,
-      status: httpStatus.CREATED,
-      message: "All Parcel Retrieved Successfully",
-      data: result,
-    });
-  },
-);
+  sendResponse(res, {
+    success: true,
+    status: httpStatus.CREATED,
+    message: "All Parcel Retrieved Successfully",
+    data: result,
+  });
+});
 
 const getSingleParcel = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -128,8 +133,6 @@ const getIncomingParcels = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
-
 
 export const ParcelControllers = {
   createParcel,
