@@ -45,7 +45,7 @@ const updateParcelStatus = catchAsync(async (req: Request, res: Response) => {
   const result = await ParcelServices.updateParcelStatus(
     id,
     { status, location, note },
-    adminId,
+    adminId
   );
 
   sendResponse(res, {
@@ -107,10 +107,16 @@ const getSingleParcel = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getMyParcels = catchAsync(async (req: Request, res: Response) => {
-  if (!req.user) {
-    throw new Error("Unauthorized: User not found in request");
+  const token = req.headers.authorization;
+  if (!token) {
+    throw new Error("Unauthorized: No token provided");
   }
-  const senderId = req.user._id;
+  const decode = decodedToken(token as string);
+
+  if (!decode) {
+    throw new Error("Unauthorized: Invalid token");
+  }
+  const senderId = decode.userId;
 
   const result = await ParcelServices.getMyParcels(senderId);
 
