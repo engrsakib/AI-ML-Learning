@@ -1,126 +1,187 @@
-# 🚚 Parcel Delivery System API
+📦 Parcel Delivery System API
 
-## 👤 Author
-**Md. Nazmus Sakib**  
-FullStack Engineer  
-[LinkedIn](https://www.linkedin.com/in/engrsakib/)
+🌟 Project Overview
 
----
+Parcel Delivery System API is a robust and secure backend application designed to handle all operations of a modern courier service. The platform offers a seamless and efficient way for users to register as senders or receivers, create parcel requests, and track their delivery status in real-time. Admins have complete control over user management and delivery status updates, ensuring a streamlined operation..
 
-## 🌟 Project Overview
+# Technology Stack
 
-This project is a robust, secure, and modular backend API built with Express.js and TypeScript.  
-Designed for a parcel delivery system, it allows users to perform various tasks as Senders, Receivers, and Admins.
+- "Runtime": "Node.js",
+- "Framework": "Express.js",
+- "Language": "TypeScript",
+- "Database": "MongoDB",
+- "Database Library": "Mongoose",
+- "Security": ["JWT", "bcrypt"],
+- "Validation": "Zod"
+ 
 
----
+# ✨ Core Features
+- Role-Based Access Control: Advanced role management with dedicated features for Admins, Senders, and Receivers, ensuring personalized functionality for each role.
+- Secure Authentication with Token Management: Robust authentication system with JSON Web Tokens (JWT) to enhance security and manage user sessions effectively.
+- Comprehensive Parcel Management: An organized system for creating, viewing, and managing parcels with real-time status updates.
+- Real-Time Status Tracking: Every parcel's status change is logged and can be tracked by both senders and receivers for complete transparency.
+- Parcel Cancellation Logic: Senders can cancel parcels only if they have not yet been dispatched, ensuring business rules are followed.
+- User & Admin Dashboards: Admin dashboard for managing all users and parcels, including blocking users and updating parcel statuses with ease.
+- RESTful API Design: A clean and intuitive API design that uses standard REST principles for easy integration and use.
 
-## 🛠️ Technology Stack
+📦 Local Setup
 
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Language:** TypeScript
-- **Database:** MongoDB
-- **Database Library:** Mongoose
-- **Security:** JWT (JSON Web Tokens), bcrypt
-- **Validation:** Zod
+ Clone the Repository
 
----
+git clone <your-repo-link>
+cd parcel-delivery-system
 
-## 📦 Local Setup
+2. Install Dependencies
 
-1. **Clone the Repository:**
-   ```sh
-   git clone <your-repo-url>
-   cd delivedge-a-parcel-booking-system
-   ```
+npm install
 
-2. **Install Dependencies:**
-   ```sh
-   npm install
-   ```
+3. Create .env File
+<!-- 
+PORT=5000
+DATABASE_URL=mongodb://localhost:27017/parcel_db
+JWT_SECRET=YOUR_VERY_SECRET_KEY
+JWT_EXPIRES_IN=7d
+BCRYPT_SALT_ROUNDS=12 -->
 
-3. **Create Environment File (.env):**
-   ```
-   PORT=3000
-   DATABASE_URL=mongodb://localhost:27017/parcel_db
-   JWT_SECRET=YOUR_VERY_SECRET_KEY
-   JWT_EXPIRES_IN=7d
-   BCRYPT_SALT_ROUNDS=12
-   ```
+4. Start the Server
 
-4. **Start the Server:**
-   ```sh
-   npm run dev
-   ```
-   Your server will run at: [http://localhost:3000](http://localhost:3000)
+npm run dev
 
----
+The server will run at: http://localhost:5000
 
-## 🧑 User Create Schema (Example)
-```json
-{
-    "email": "sakib.reciver@gamil.com",
-    "password": "1445uIoG@",
-    "name": "sakib"
-}
-```
+<!-- # 🔑 Admin Access (for Testing)
 
----
+- "email": "azmiruddin05@gmail.com",
+- "password": "Azmir1@" -->
 
-## 📦 Parcel Create Schema (Example)
-```json
-{
-  "receiver": {
-    "name": "Ashik",
-    "phone": "01912345678",
-    "address": "Dhaka, Bangladesh",
-    "userId": "688e0e2151e927e6300891fb"
-  },
-  "parcelType": "Electronics",
-  "weight": 2.5,
-  "deliveryAddress": "Chittagong, Bangladesh",
-  "currentStatus": "Pending",
-  "isCancelled": false,
-  "isDelivered": false,
-  "statusLogs": []
-}
-```
 
----
+🚀 API Base URL
 
-## 🚀 API Endpoints
+# https://parcel-delivery-system-nine.vercel.app/api/v1
 
-**Base URL:** `http://localhost:3000/api/v1`
+🔐 Authentication Routes
 
-### 🔐 Authentication Routes
+## Register
 
-- **POST /auth/register:** Register a new user (Sender/Receiver)
-- **POST /auth/login:** Log in a user
-- **POST /auth/reset-password:** Reset the password of the logged-in user
-- **POST /auth/logout:** Log out a user
+## POST /auth/register
 
-### 🧑 User Routes
+- "name": "John Doe",
+- "email": "john.doe@example.com",
+- "password": "Password@123",
+- "role": "Sender"
 
-- **POST /users/register:** Register a new user (Sender/Receiver)
-- **GET /users:** View the list of all users (Admin only)
-- **PATCH /users/:id:** Update a user's details (Admin/Receiver/Sender)
 
-### 📦 Parcel Routes
+## Login
 
-- **POST /parcels:** Create a new parcel (Sender only)
-- **GET /parcels/all:** View the list of all parcels (Admin only)
-- **GET /parcels/my:** View all parcels sent by you (Sender only)
-- **GET /parcels/incoming:** View all parcels addressed to you (Receiver only)
-- **GET /parcels/:id:** Get a single parcel's details (Any Authenticated)
-- **PATCH /parcels/:id/cancel:** Cancel a parcel (Sender only, before delivery starts)
-- **PATCH /parcels/:id/status:** Update a parcel's status (Admin only)
+## POST /auth/login
 
----
 
-## 📝 Demo & Video
+- "email": "john.doe@example.com",
+- "password": "Password@123"
 
-**Live Link:** [https://delivedge-r5e7tgc0l-engrsakib-projects.vercel.app/](https://delivedge-r5e7tgc0l-engrsakib-projects.vercel.app/)  
-**Demo Video:** [Project Overview & Demo (LinkedIn)](https://www.linkedin.com/posts/engrsakib_delivedge-parcel-booking-system-project-activity-7357434464966238210-KvrE?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVmnvABBjY2I6i0j9pRy_jfxnOKpinccD4)
-**PostMan:** [Postman](https://drive.google.com/file/d/143kVUbPJ6fc8TiRfk3WQC2XlijAtn95_/view?usp=sharing)
 
----
+## Reset Password
+
+## POST /auth/reset-password
+
+- oldPassword": "Password@123",
+- newPassword": "NewPassword@123"
+
+
+## Logout
+
+## POST /auth/logout (No body required)
+
+# 📦 Parcel Routes
+
+## Create Parcel (Sender)
+
+## POST /parcels
+
+
+- "receiver": {
+- "name": "Jane Smith",
+- "phone": "01911223344",
+- "address": "123 Test Street, Dhaka",
+- "userId": "60c72b2f9c1d44001c8c8c8c"
+- },
+- "parcelType": "Electronics",
+- "weight": 1.5,
+- "deliveryAddress": "123 Test Street, Dhaka"
+
+
+# All Parcels (Admin)
+
+## GET /parcels
+
+## My Parcels (Sender)
+
+## GET /parcels/my
+
+## Incoming Parcels (Receiver)
+
+## GET /parcels/incoming
+
+## Cancel Parcel (Sender)
+
+## PATCH /parcels/:id/cancel 
+
+- "status": "Cancelled",
+- "location": "Dhaka Hub",
+- "note": "Parcel has been approved for delivery."
+
+
+## Update Parcel Status (Admin)
+
+## PATCH /parcels/:id/status
+
+- "status": "Approved",
+- "location": "Dhaka Hub",
+- "note": "Parcel has been approved for delivery."
+
+
+# 👤 User Routes
+
+## Register (Public)
+
+## POST /users/register
+
+- "name": "Test User",
+- "email": "testuser@example.com",
+- "password": "Password@123",
+- "role": "Sender"
+
+## All Users (Admin)
+
+## GET /users/all-users
+
+## Single User (Authenticated)
+
+## GET /users/:id
+
+## Update User (Authenticated)
+
+## PATCH /users/:id
+
+- "name": "Updated Name",
+- "email: "user email requerd to update"
+- "phone": "01655667788"
+
+
+## Change User Status (Admin)
+
+## PATCH /users/:id/status
+
+- "status": "Blocked"
+
+
+## Delete User (Admin)
+
+## DELETE /users/:id
+
+Testing & Demo
+
+All endpoints have been tested with Postman. A demo video showcasing all features is available.
+
+🔒 Secure, 🚀 Fast, and ⚙️ Modular — this Parcel Delivery API is built for real-world production use.
+

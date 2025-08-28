@@ -1,76 +1,140 @@
-/* eslint-disable no-console */
-import { Request, Response } from "express";
+
+import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
-import { UserService } from "./user.service";
-import AppError from "../../errorHelpers/appError";
-import { sendResponse } from "../../util/sendResponse";
-import { verifyToken } from "../../util/verifyToken";
+import { UserServices } from "./user.service";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
 import { JwtPayload } from "jsonwebtoken";
 
 
-/**
- * UserController handles user-related requests.
- * It contains methods for creating a user.
- */
-const createUser = async (req: Request, res: Response) => {
-  try {
-    const newUser = await UserService.createUser(req.body);
-    res.status(httpStatus.CREATED).json({
-      message: "User created successfully",
-      user: newUser,
-    });
-  
-  } catch (error) {
-    console.log(error);
-    throw new AppError("Failed to create user", httpStatus.INTERNAL_SERVER_ERROR);
-  }
-};
-const updateUser = async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id;
-    const token = req.headers.authorization;
-    const isTokenValid = verifyToken(token as string,"ADMIN", "SUPPERADMIN", "USER") as JwtPayload;
-    if (!isTokenValid) {
-      throw new AppError("Unauthorized access", httpStatus.UNAUTHORIZED);
-    }
-    const updatedUser = await UserService.updateUser(id, req.body, isTokenValid);
-    res.status(httpStatus.OK).json({
-      message: "User updated successfully",
-      user: updatedUser,
-    });
-  
-  } catch (error) {
-    console.log(error);
-    throw new AppError("Failed to update user", httpStatus.INTERNAL_SERVER_ERROR);
-  }
-};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const createUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = await UserServices.createUser(req.body)
 
-
-const getAllUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await UserService.getAllUsers();
-   
     sendResponse(res, {
-      success: true,
-      message: "Users retrieved successfully",
-      status: httpStatus.OK,
-      data: users?.users,
-      metadata: {
-        totalCount: users?.userCount || 0,
-      },
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "User Created Successfully",
+        data: user,
+    })
+})
+
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.id;
+    const verifiedToken = req.user as JwtPayload;;
+    const payload = req.body;
+    const user = await UserServices.updateUser(userId, payload, verifiedToken)
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "User Updated Successfully",
+        data: user,
+    })
+})
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await UserServices.getAllUsers();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "All Users Retrieved Successfully",
+        data: result.data,
+        meta: result.meta
+    })
+})
+
+
+const getSingleUser = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await UserServices.getSingleUser(id);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Single User Retrieved Successfully',
+        data: result,
     });
-  } catch (error) {
-    console.log(error);
-    throw new AppError("Failed to retrieve users", httpStatus.INTERNAL_SERVER_ERROR);
-  }
-};
+});
 
-/**
- * UserController exports the methods to be used in routes.
- */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getMe = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const decodedToken = req.user as JwtPayload
+    const result = await UserServices.getMe(decodedToken._id);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "Your profile Retrieved Successfully",
+        data: result
+    })
+})
 
-export const UserController = {
-  createUser,
-  getAllUsers,
-  updateUser,
-};
+const changeUserStatus = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params; 
+  const { status } = req.body; 
+
+  const updatedUser = await UserServices.changeUserStatus(id, status);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User status updated successfully',
+    data: updatedUser,
+  });
+});
+
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getUserStats = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const stats = await UserServices.getUserStats();
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "User stats retrieved successfully",
+        data: stats,
+    });
+});
+
+const searchUserByEmail = catchAsync(async (req: Request, res: Response) => {
+    const { email } = req.query;
+    const user = await UserServices.searchUserByEmail(email as string);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User found',
+        data: user,
+    });
+});
+
+
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await UserServices.deleteUser(id);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'User deleted successfully',
+        data: result,
+    });
+});
+
+
+
+
+
+
+export const UserControllers = {
+    createUser,
+    getAllUsers,
+    updateUser,
+    getSingleUser,
+    changeUserStatus,
+    getUserStats,
+    searchUserByEmail,
+    getMe,
+    deleteUser
+}
+

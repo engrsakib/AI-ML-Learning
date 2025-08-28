@@ -1,24 +1,39 @@
-import express, { Express, Request, Response } from "express";
-import cors from "cors";
-import { router } from "./app/routes";
-import notFoundMiddleware from "./app/middleware/notFound";
-import globalErrorHandler from "./app/middleware/globalErrorHandeler";
+
+
+import cors from "cors"
 import cookieParser from "cookie-parser";
-const app: Express = express();
+import express, { Request, Response } from "express"
+import { router } from "./app/routes"
+import expressSession from "express-session"
+import { globalErrorHandler } from "./app/middlewares/globalErrorHandler"
+import { envVars } from "./app/config/env"
+import notFound from "./app/middlewares/notFound";
+const app = express()
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+// google// auth
+app.use(expressSession({
+    secret:envVars.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+
+app.use(express.json())
 app.use(cookieParser());
+app.use(cors({
+    origin: envVars.FRONTEND_URL,
+    credentials: true
+}))
 
-app.use("/api/v1", router);
+app.use('/api/v1',router)
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).json("Welcome to the Percel Booking Management System");
-});
+app.get('/', (req: Request, res: Response) => {
+   res.send("Welcome to Parcel Delivery System")
+})
 
-app.use(globalErrorHandler);
-// Handle 404 Not Found
-app.use(notFoundMiddleware);
 
-export default app;
+app.use(notFound)
+app.use(globalErrorHandler)
+
+
+
+export default app

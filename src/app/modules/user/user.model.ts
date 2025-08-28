@@ -1,42 +1,51 @@
 import { model, Schema } from "mongoose";
-import { isActive, IUser, role } from "./user.interface";
+import { IUser, IUserRole, IUserStatus } from "./user.interface";
+
 
 const userSchema = new Schema<IUser>(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    phone: { type: String, default: null },
-    picture: { type: String, default: null },
-    address: { type: String, default: null },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: 0,
+    },
     role: {
       type: String,
-      enum: Object.values(role),
-      default: role.SENDER,
+      enum: Object.values(IUserRole),
       required: true,
     },
-    isDeleted: { type: Boolean, default: false },
-    isActive: {
+    phone: {
       type: String,
-      enum: Object.values(isActive),
-      default: isActive.ACTIVE,
+      trim: true,
+      sparse: true, 
     },
-    isVarified: { type: Boolean, default: false },
-    auth: [
-      {
-        provider: { type: String, required: true },
-        providerId: { type: String, required: true },
-      },
-    ],
-    booking: [{ type: Schema.Types.ObjectId, ref: "Booking" }],
-    guide: { type: Schema.Types.ObjectId, ref: "Guide", default: null },
+    address: {
+      type: String,
+      trim: true,
+    },
+     status: {
+      type: String,
+      enum: Object.values(IUserStatus),
+      default: IUserStatus.Active,
+    },
   },
   {
     timestamps: true,
-    versionKey: false,
-    toJSON: { virtuals: true },
-  },
+    versionKey: false
+  }
 );
 
 
-export const User = model<IUser>("User", userSchema);
+export const User = model<IUser>("User",userSchema)

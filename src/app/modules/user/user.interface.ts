@@ -1,36 +1,52 @@
 import { Types } from "mongoose";
 
-export enum role{
-    SENDER = "SENDER",
-    ADMIN = "ADMIN",
-    RECIVER = "RECIVER",
+export enum IUserRole {
+    Admin = "Admin",
+    Sender = "Sender",
+    Receiver = "Receiver",
 }
 
-export interface IAuth {
-  provider: string;
-  providerId: string;
+export enum IUserStatus {
+    Active = "Active",
+    Blocked = "Blocked"
 }
 
-export enum isActive{
-    ACTIVE = "ACTIVE",
-    INACTIVE = "INACTIVE",
-    BLOCKED = "BLOCKED",
-    DELETED = "DELETED",
+export interface IAuthProvider {
+    provider: "Google" | "Credential",
+    providerId : string
 }
 
 export interface IUser {
-  _id?: Types.ObjectId;
-  name: string;
-  email: string;
-  password: string;
-  phone?: string;
-  picture?: string;
-  address?: string;
-  role: role;
-  isDeleted ?: boolean;
-  isActive ?: isActive;
-  isVarified ?: boolean;
-  auth: IAuth[];
-  booking ?: Types.ObjectId[];
-  guide ?: Types.ObjectId;
+    _id?: Types.ObjectId; 
+    name: string;
+    email: string;
+    password?: string; 
+    role: IUserRole;
+    phone?: string;
+    address?: string;
+    status: IUserStatus;
+    createdAt?: Date;
+    updatedAt?: Date;
+
 }
+// export interface IRegisteredUserResponse {
+//     _id: Types.ObjectId;
+//     name: string;
+//     email: string;
+//     role: IUserRole;
+//     status: IUserStatus;
+//     phone?: string;
+//     address?: string;
+//     createdAt: Date;
+//     updatedAt: Date;
+// }
+
+
+// export interface IUpdateUserPayload {
+//     name?: string;
+//     email?: string;
+//     phone?: string;
+//     address?: string;
+//     status?: IUserStatus;
+//     role?: IUserRole;
+// }
