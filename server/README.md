@@ -75,7 +75,7 @@ npm run dev
 ## 🚀 API Base URL
 
 ```
-https://parcel-delivery-system-nine.vercel.app/api/v1
+https://logisticoreserver.vercel.app/api/v1
 ```
 
 ---
